@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     private Input_Manager playerInputs;
     public static InputManager _INPUT_MANAGER;
     public Vector2 leftAxisValue = Vector2.zero;
+    public float isBraking = 0f;
 
     private void Awake()
     {
@@ -22,6 +23,8 @@ public class InputManager : MonoBehaviour
             playerInputs = new Input_Manager();
             playerInputs.Enable();
             playerInputs.Player.Move.performed += LeftAxisUpdate;
+            playerInputs.Player.BrakeStart.performed += x =>BrakePressed();
+            playerInputs.Player.BrakeEnd.performed += x => BrakeReleased();
 
             _INPUT_MANAGER = this;
             DontDestroyOnLoad(this);
@@ -36,10 +39,18 @@ public class InputManager : MonoBehaviour
         Debug.Log("Normalize: " + leftAxisValue.normalized);
     }
 
+   public void BrakePressed()
+   {
+        isBraking = 1;
+   }
+    public void BrakeReleased()
+    {
+        isBraking = 0;
+    }
     private void Update()
     {
 
-        
+        Debug.Log(isBraking);
         
         InputSystem.Update();
     }

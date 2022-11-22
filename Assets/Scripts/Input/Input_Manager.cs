@@ -35,6 +35,24 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BrakeStart"",
+                    ""type"": ""Button"",
+                    ""id"": ""5e9f3b79-67a5-4d92-aad6-4ea0675c50c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BrakeEnd"",
+                    ""type"": ""Button"",
+                    ""id"": ""a1bd84dd-bcda-430a-96f8-43833304c9d4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -103,6 +121,28 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4c8f733-7dea-436a-8925-f9fe6b8a0e84"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BrakeStart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5574a27-01a6-49e1-bf11-832b38e885b3"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BrakeEnd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -112,6 +152,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_BrakeStart = m_Player.FindAction("BrakeStart", throwIfNotFound: true);
+        m_Player_BrakeEnd = m_Player.FindAction("BrakeEnd", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -172,11 +214,15 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_BrakeStart;
+    private readonly InputAction m_Player_BrakeEnd;
     public struct PlayerActions
     {
         private @Input_Manager m_Wrapper;
         public PlayerActions(@Input_Manager wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @BrakeStart => m_Wrapper.m_Player_BrakeStart;
+        public InputAction @BrakeEnd => m_Wrapper.m_Player_BrakeEnd;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -189,6 +235,12 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                @BrakeStart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeStart;
+                @BrakeStart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeStart;
+                @BrakeStart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeStart;
+                @BrakeEnd.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeEnd;
+                @BrakeEnd.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeEnd;
+                @BrakeEnd.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeEnd;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -196,6 +248,12 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @BrakeStart.started += instance.OnBrakeStart;
+                @BrakeStart.performed += instance.OnBrakeStart;
+                @BrakeStart.canceled += instance.OnBrakeStart;
+                @BrakeEnd.started += instance.OnBrakeEnd;
+                @BrakeEnd.performed += instance.OnBrakeEnd;
+                @BrakeEnd.canceled += instance.OnBrakeEnd;
             }
         }
     }
@@ -203,5 +261,7 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnBrakeStart(InputAction.CallbackContext context);
+        void OnBrakeEnd(InputAction.CallbackContext context);
     }
 }
