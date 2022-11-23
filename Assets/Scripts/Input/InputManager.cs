@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     public static InputManager _INPUT_MANAGER;
     public Vector2 leftAxisValue = Vector2.zero;
     public float isBraking = 0f;
+    public float isTurbo = 0f;
 
     private void Awake()
     {
@@ -25,6 +26,8 @@ public class InputManager : MonoBehaviour
             playerInputs.Player.Move.performed += LeftAxisUpdate;
             playerInputs.Player.BrakeStart.performed += x =>BrakePressed();
             playerInputs.Player.BrakeEnd.performed += x => BrakeReleased();
+            playerInputs.Player.TurboStart.performed += x => TurboPressed();
+            playerInputs.Player.TurboEnd.performed += x => TurboReleased();
 
             _INPUT_MANAGER = this;
             DontDestroyOnLoad(this);
@@ -46,6 +49,14 @@ public class InputManager : MonoBehaviour
     public void BrakeReleased()
     {
         isBraking = 0;
+    }
+    public void TurboPressed()
+    {
+        isTurbo = 1;
+    }
+    public void TurboReleased()
+    {
+        isTurbo = 0;
     }
     private void Update()
     {

@@ -21,10 +21,15 @@ public class PlayerController : MonoBehaviour
     public List<Wheel> wheels = new List<Wheel>();
     public float maxAcceleration;
     public float maxBrakeAcceleration;
+    public float maxVelocity;
+    private float iniMaxVelocity;
+    private float iniMaxAcceleration;
+    public float velocity;
     public float turnSensivity = 1f;
     public float maxSteerAngle;
     public Vector3 centerOfMass;
-
+    private float turboOnVelocity;
+    private float turboOnAcceleration;
 
     float moveInput;
     public Rigidbody carRB;
@@ -33,23 +38,36 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         carRB.centerOfMass = centerOfMass;
+        iniMaxVelocity = maxVelocity;
+        iniMaxAcceleration = maxAcceleration;
+        turboOnVelocity = maxVelocity * 2;
+        turboOnAcceleration = maxAcceleration * 2;
     }
     private void LateUpdate()
     {
         Move();
         Steer();
         Brake();
+        Turbo();
+        
     }
     // Update is called once per frame
     void Update()
     {
+
         AnimationWheels();
     }
     private void Move()
     {
+        velocity = maxAcceleration * Time.deltaTime * 600 * InputManager._INPUT_MANAGER.leftAxisValue.y;
+        if(velocity >= maxVelocity)
+        {
+            velocity = maxVelocity;
+        }
+       
         foreach(var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = InputManager._INPUT_MANAGER.leftAxisValue.y * 600  * maxAcceleration * Time.deltaTime;
+            wheel.wheelCollider.motorTorque = velocity * Time.deltaTime * 600;
         }
     }
     void Steer()
@@ -90,6 +108,22 @@ public class PlayerController : MonoBehaviour
             wheel.wheelCollider.GetWorldPose(out pos, out rotation);
             wheel.wheelModel.transform.position = pos;
             wheel.wheelModel.transform.rotation = rotation;
+        }
+    }
+    void Turbo()
+    {
+        if(InputManager._INPUT_MANAGER.isTurbo ==1)
+        {
+            maxVelocity = turboOnVelocity;
+            maxAcceleration = turboOnAcceleration;
+            GameManager._GAME_MANAGER.TurboOn();
+
+        }
+        if (InputManager._INPUT_MANAGER.isTurbo == 0 || GameManager._GAME_MANAGER.turboPowerReamining <=0)
+        {
+            maxAcceleration = iniMaxAcceleration;
+            maxVelocity = iniMaxVelocity;
+            GameManager._GAME_MANAGER.TurboOff();
         }
     }
 }

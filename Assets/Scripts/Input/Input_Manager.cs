@@ -53,6 +53,24 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TurboStart"",
+                    ""type"": ""Button"",
+                    ""id"": ""8814fb14-7d26-4a02-b4a1-b60a1171db5e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TurboEnd"",
+                    ""type"": ""Button"",
+                    ""id"": ""b0a34a02-bdc7-48c9-852d-cfca1cd6d2cc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -143,6 +161,28 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                     ""action"": ""BrakeEnd"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d89ce86b-8e0e-4add-8882-902a65f47dec"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurboStart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1beac41-bd85-45e7-a283-4c8b4a74586a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurboEnd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -154,6 +194,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_BrakeStart = m_Player.FindAction("BrakeStart", throwIfNotFound: true);
         m_Player_BrakeEnd = m_Player.FindAction("BrakeEnd", throwIfNotFound: true);
+        m_Player_TurboStart = m_Player.FindAction("TurboStart", throwIfNotFound: true);
+        m_Player_TurboEnd = m_Player.FindAction("TurboEnd", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -216,6 +258,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_BrakeStart;
     private readonly InputAction m_Player_BrakeEnd;
+    private readonly InputAction m_Player_TurboStart;
+    private readonly InputAction m_Player_TurboEnd;
     public struct PlayerActions
     {
         private @Input_Manager m_Wrapper;
@@ -223,6 +267,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @BrakeStart => m_Wrapper.m_Player_BrakeStart;
         public InputAction @BrakeEnd => m_Wrapper.m_Player_BrakeEnd;
+        public InputAction @TurboStart => m_Wrapper.m_Player_TurboStart;
+        public InputAction @TurboEnd => m_Wrapper.m_Player_TurboEnd;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -241,6 +287,12 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                 @BrakeEnd.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeEnd;
                 @BrakeEnd.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeEnd;
                 @BrakeEnd.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBrakeEnd;
+                @TurboStart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboStart;
+                @TurboStart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboStart;
+                @TurboStart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboStart;
+                @TurboEnd.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboEnd;
+                @TurboEnd.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboEnd;
+                @TurboEnd.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboEnd;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -254,6 +306,12 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                 @BrakeEnd.started += instance.OnBrakeEnd;
                 @BrakeEnd.performed += instance.OnBrakeEnd;
                 @BrakeEnd.canceled += instance.OnBrakeEnd;
+                @TurboStart.started += instance.OnTurboStart;
+                @TurboStart.performed += instance.OnTurboStart;
+                @TurboStart.canceled += instance.OnTurboStart;
+                @TurboEnd.started += instance.OnTurboEnd;
+                @TurboEnd.performed += instance.OnTurboEnd;
+                @TurboEnd.canceled += instance.OnTurboEnd;
             }
         }
     }
@@ -263,5 +321,7 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnBrakeStart(InputAction.CallbackContext context);
         void OnBrakeEnd(InputAction.CallbackContext context);
+        void OnTurboStart(InputAction.CallbackContext context);
+        void OnTurboEnd(InputAction.CallbackContext context);
     }
 }
