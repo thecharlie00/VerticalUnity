@@ -6,10 +6,12 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager _GAME_MANAGER;
+    #region Turbo
     public float turboPower;
     public float turboPowerReamining;
     public bool theresTurboRemaining;
-
+    public bool isActive;
+    #endregion
     private void Awake()
     {
         if(_GAME_MANAGER != null && _GAME_MANAGER != this)
@@ -43,9 +45,10 @@ public class GameManager : MonoBehaviour
 
     public void TurboOn()
     {
+        
         if (theresTurboRemaining && turboPowerReamining >=0)
         {
-            turboPowerReamining -= Time.deltaTime * 100;
+            turboPowerReamining -= Time.deltaTime * 10;
         }
         if (turboPowerReamining <= 0)
         {

@@ -8,16 +8,31 @@ public class CameraFollow : MonoBehaviour
     public float rotSmoothness;
 
     public Vector3 offset;
+    private Vector3 iniOffset;
     public Vector3 rotOffset;
 
     public Transform carTarget;
 
 
 
-
+    private void Start()
+    {
+        iniOffset = offset;
+    }
     private void FixedUpdate()
     {
         FollowPlayer();
+
+        if (GameManager._GAME_MANAGER.isActive)
+        {
+            
+            offset.z = -60f;
+
+        }
+        if(GameManager._GAME_MANAGER.isActive == false || GameManager._GAME_MANAGER.turboPowerReamining <= 0)
+        {
+            offset = iniOffset;
+        }
         
     }
     void FollowPlayer()

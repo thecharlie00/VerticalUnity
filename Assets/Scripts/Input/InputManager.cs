@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
     public Vector2 leftAxisValue = Vector2.zero;
     public float isBraking = 0f;
     public float isTurbo = 0f;
+    public float isTwoWheels = 0f;
    
     private void Awake()
     {
@@ -28,6 +29,8 @@ public class InputManager : MonoBehaviour
             playerInputs.Player.BrakeEnd.performed += x => BrakeReleased();
             playerInputs.Player.TurboStart.performed += x => TurboPressed();
             playerInputs.Player.TurboEnd.performed += x => TurboReleased();
+            playerInputs.Player.TwoWheelsStart.performed += x => TwoWheelsPressed();
+            playerInputs.Player.TwoWheelsEnd.performed += x => TwoWheelsReleased();
 
             _INPUT_MANAGER = this;
             DontDestroyOnLoad(this);
@@ -38,8 +41,6 @@ public class InputManager : MonoBehaviour
     public void LeftAxisUpdate(InputAction.CallbackContext context)
     {
         leftAxisValue = context.ReadValue<Vector2>();
-        Debug.Log("Magnitude: " + leftAxisValue.magnitude);
-        Debug.Log("Normalize: " + leftAxisValue.normalized);
     }
 
    public void BrakePressed()
@@ -57,6 +58,14 @@ public class InputManager : MonoBehaviour
     public void TurboReleased()
     {
         isTurbo = 0;
+    }
+    public void TwoWheelsPressed()
+    {
+        isTwoWheels = 1f;
+    }
+    public void TwoWheelsReleased()
+    {
+        isTwoWheels = 0f;
     }
     private void Update()
     {

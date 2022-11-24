@@ -71,6 +71,24 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TwoWheelsStart"",
+                    ""type"": ""Button"",
+                    ""id"": ""014d5f70-21ba-48c2-8da9-d663e20eac78"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TwoWheelsEnd"",
+                    ""type"": ""Button"",
+                    ""id"": ""20827dd0-51bd-4f30-b13e-5e92ffb512d0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -183,6 +201,28 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                     ""action"": ""TurboEnd"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02ed4da0-be31-461a-8364-fdaf91548eed"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TwoWheelsStart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""097ea820-6dbe-4d33-9bb2-55effaa9da24"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TwoWheelsEnd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -196,6 +236,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         m_Player_BrakeEnd = m_Player.FindAction("BrakeEnd", throwIfNotFound: true);
         m_Player_TurboStart = m_Player.FindAction("TurboStart", throwIfNotFound: true);
         m_Player_TurboEnd = m_Player.FindAction("TurboEnd", throwIfNotFound: true);
+        m_Player_TwoWheelsStart = m_Player.FindAction("TwoWheelsStart", throwIfNotFound: true);
+        m_Player_TwoWheelsEnd = m_Player.FindAction("TwoWheelsEnd", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -260,6 +302,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_BrakeEnd;
     private readonly InputAction m_Player_TurboStart;
     private readonly InputAction m_Player_TurboEnd;
+    private readonly InputAction m_Player_TwoWheelsStart;
+    private readonly InputAction m_Player_TwoWheelsEnd;
     public struct PlayerActions
     {
         private @Input_Manager m_Wrapper;
@@ -269,6 +313,8 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         public InputAction @BrakeEnd => m_Wrapper.m_Player_BrakeEnd;
         public InputAction @TurboStart => m_Wrapper.m_Player_TurboStart;
         public InputAction @TurboEnd => m_Wrapper.m_Player_TurboEnd;
+        public InputAction @TwoWheelsStart => m_Wrapper.m_Player_TwoWheelsStart;
+        public InputAction @TwoWheelsEnd => m_Wrapper.m_Player_TwoWheelsEnd;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -293,6 +339,12 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                 @TurboEnd.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboEnd;
                 @TurboEnd.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboEnd;
                 @TurboEnd.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTurboEnd;
+                @TwoWheelsStart.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTwoWheelsStart;
+                @TwoWheelsStart.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTwoWheelsStart;
+                @TwoWheelsStart.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTwoWheelsStart;
+                @TwoWheelsEnd.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTwoWheelsEnd;
+                @TwoWheelsEnd.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTwoWheelsEnd;
+                @TwoWheelsEnd.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTwoWheelsEnd;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -312,6 +364,12 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
                 @TurboEnd.started += instance.OnTurboEnd;
                 @TurboEnd.performed += instance.OnTurboEnd;
                 @TurboEnd.canceled += instance.OnTurboEnd;
+                @TwoWheelsStart.started += instance.OnTwoWheelsStart;
+                @TwoWheelsStart.performed += instance.OnTwoWheelsStart;
+                @TwoWheelsStart.canceled += instance.OnTwoWheelsStart;
+                @TwoWheelsEnd.started += instance.OnTwoWheelsEnd;
+                @TwoWheelsEnd.performed += instance.OnTwoWheelsEnd;
+                @TwoWheelsEnd.canceled += instance.OnTwoWheelsEnd;
             }
         }
     }
@@ -323,5 +381,7 @@ public partial class @Input_Manager : IInputActionCollection2, IDisposable
         void OnBrakeEnd(InputAction.CallbackContext context);
         void OnTurboStart(InputAction.CallbackContext context);
         void OnTurboEnd(InputAction.CallbackContext context);
+        void OnTwoWheelsStart(InputAction.CallbackContext context);
+        void OnTwoWheelsEnd(InputAction.CallbackContext context);
     }
 }
