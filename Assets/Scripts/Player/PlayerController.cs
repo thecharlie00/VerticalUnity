@@ -112,18 +112,25 @@ public class PlayerController : MonoBehaviour
     }
     void Turbo()
     {
-        if(InputManager._INPUT_MANAGER.isTurbo ==1)
+        if(InputManager._INPUT_MANAGER.isTurbo ==1 && GameManager._GAME_MANAGER.theresTurboRemaining)
         {
             maxVelocity = turboOnVelocity;
             maxAcceleration = turboOnAcceleration;
             GameManager._GAME_MANAGER.TurboOn();
 
         }
-        if (InputManager._INPUT_MANAGER.isTurbo == 0 || GameManager._GAME_MANAGER.turboPowerReamining <=0)
+        if (InputManager._INPUT_MANAGER.isTurbo == 0)
+        {
+
+            maxAcceleration = iniMaxAcceleration;
+            maxVelocity = iniMaxVelocity;
+            StartCoroutine(GameManager._GAME_MANAGER.RecoverTurbo());
+        }
+        else if(GameManager._GAME_MANAGER.theresTurboRemaining == false && InputManager._INPUT_MANAGER.isTurbo == 0)
         {
             maxAcceleration = iniMaxAcceleration;
             maxVelocity = iniMaxVelocity;
-            GameManager._GAME_MANAGER.TurboOff();
+            StartCoroutine(GameManager._GAME_MANAGER.RecoverTurbo());
         }
     }
 }

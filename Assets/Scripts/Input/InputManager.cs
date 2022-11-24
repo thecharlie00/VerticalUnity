@@ -11,7 +11,7 @@ public class InputManager : MonoBehaviour
     public Vector2 leftAxisValue = Vector2.zero;
     public float isBraking = 0f;
     public float isTurbo = 0f;
-
+   
     private void Awake()
     {
         if (_INPUT_MANAGER != null && _INPUT_MANAGER != this)
@@ -61,7 +61,7 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
 
-        Debug.Log(isBraking);
+       
         
         InputSystem.Update();
     }

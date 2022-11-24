@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager _GAME_MANAGER;
     public float turboPower;
     public float turboPowerReamining;
+    public bool theresTurboRemaining;
 
     private void Awake()
     {
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
            _GAME_MANAGER = this;
             DontDestroyOnLoad(this);
         }
+        
     }
     void Start()
     {
@@ -29,24 +31,53 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    public void TurboOn()
-    {
-        turboPowerReamining-=Time.deltaTime;
-        if(turboPowerReamining <= 0)
+        if(turboPowerReamining >= 1)
         {
-            turboPowerReamining = 0;
+            theresTurboRemaining = true;
         }
-    }
-
-    public void TurboOff()
-    {
-        turboPowerReamining += Time.deltaTime;
-        if(turboPowerReamining >= turboPower)
+        if (turboPowerReamining >= turboPower)
         {
             turboPowerReamining = turboPower;
         }
     }
+
+    public void TurboOn()
+    {
+        if (theresTurboRemaining && turboPowerReamining >=0)
+        {
+            turboPowerReamining -= Time.deltaTime * 100;
+        }
+        if (turboPowerReamining <= 0)
+        {
+            theresTurboRemaining = false;
+            
+        }
+        if (!theresTurboRemaining)
+        {
+            turboPowerReamining = 0;
+            
+        }
+        
+    }
+        
+
+    public void TurboOff()
+    {
+
+       
+        if(turboPowerReamining < 100)
+        {
+            turboPowerReamining+=Time.deltaTime;
+        }
+        
+        
+    }
+
+    public IEnumerator RecoverTurbo()
+    {
+        yield return new WaitForSeconds(1f);
+        TurboOff();
+    }
+
+   
 }
