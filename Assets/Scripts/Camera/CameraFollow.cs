@@ -46,7 +46,7 @@ public class CameraFollow : MonoBehaviour
         Vector3 targetPos = new Vector3();
         targetPos = carTarget.TransformPoint(offset);
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, movSmoothness * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, targetPos, movSmoothness * Time.deltaTime*10);
 
     }
 
@@ -58,7 +58,7 @@ public class CameraFollow : MonoBehaviour
         rotation = Quaternion.LookRotation(direction + rotOffset, Vector3.up);
 
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotSmoothness * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotSmoothness * Time.deltaTime * 10);
 
     }
 }

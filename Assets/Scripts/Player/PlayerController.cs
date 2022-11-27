@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
     public struct Wheel
     {
         public GameObject wheelModel;
-        public WheelCollider wheelCollider;
         public Axel axel;
         public Side side;
     }
@@ -35,18 +34,20 @@ public class PlayerController : MonoBehaviour
     public float velocity;
     public float turnSensivity = 1f;
     public float maxSteerAngle;
-    public Vector3 centerOfMass;
     private float turboOnVelocity;
     private float turboOnAcceleration;
     float moveInput;
-    public Rigidbody carRB;
+    public CharacterController controller;
+    private Vector3 finalVelocity = Vector3.zero;
+    private float velocityXZ = 5f;
+    private float gravity = 20f;
     #endregion
-    
+
 
 
     void Start()
     {
-        carRB.centerOfMass = centerOfMass;
+        
         iniMaxVelocity = maxVelocity;
         iniMaxAcceleration = maxAcceleration;
         turboOnVelocity = maxVelocity * 2;
@@ -70,27 +71,21 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         //velocity = maxAcceleration * Time.deltaTime * 600 ;
-        float input = InputManager._INPUT_MANAGER.leftAxisValue.y;
-        Debug.Log(input);
-        if (carRB.velocity.magnitude - carRB.velocity.y < 60)
+        Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward;
+        direction.Normalize();
+        //Calcular velocidad XZ
+        finalVelocity.x = direction.x * maxAcceleration * Time.deltaTime;
+        finalVelocity.z = direction.z * maxAcceleration * Time.deltaTime;
+        if(finalVelocity.z != 0)
         {
-
-            carRB.AddForce(Vector3.forward * 1000 * input);
+            transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);
         }
-
         
-
-        //Debug.Log(carRB.velocity.magnitude-carRB.velocity.y);
-
-        /*if(velocity >= maxVelocity)
-        {
-            velocity = maxVelocity;
-        }
-       
-        foreach(var wheel in wheels)
-        {
-            wheel.wheelCollider.motorTorque = velocity * Time.deltaTime * 600;
-        }*/
+        //Asignar dirección Y
+        direction.y = -1f;
+        //Calcular gravedad
+        finalVelocity.y += direction.y * gravity * Time.deltaTime;
+        controller.Move(finalVelocity * Time.deltaTime *100);
     }
     void Steer()
     {
@@ -99,7 +94,7 @@ public class PlayerController : MonoBehaviour
             if(wheel.axel == Axel.FRONT)
             {
                 var _steerAngle = InputManager._INPUT_MANAGER.leftAxisValue.x * maxSteerAngle * turnSensivity;
-                wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
+                //wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
             }
         }
     }
@@ -109,27 +104,27 @@ public class PlayerController : MonoBehaviour
         {
             foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.brakeTorque = maxBrakeAcceleration * 300 * Time.deltaTime;
+                //wheel.wheelCollider.brakeTorque = maxBrakeAcceleration * 300 * Time.deltaTime;
             }
         }
         else
         {
             foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.brakeTorque = 0;
+                //wheel.wheelCollider.brakeTorque = 0;
             }
         }
     }
     void AnimationWheels()
     {
-        foreach (var wheel in wheels)
+        /*/foreach (var wheel in wheels)
         {
-          /*  Quaternion rotation;
+            Quaternion rotation;
             Vector3 pos;
             //wheel.wheelCollider.GetWorldPose(out pos, out rotation);
             wheel.wheelModel.transform.position = pos;
-            wheel.wheelModel.transform.rotation = rotation;*/
-        }
+            wheel.wheelModel.transform.rotation = rotation;
+        }*/
     }
     void Turbo()
     {
@@ -159,7 +154,7 @@ public class PlayerController : MonoBehaviour
         if(InputManager._INPUT_MANAGER.isTwoWheels == 1)
         {
            // carRB.MoveRotation(carRB.transform.rotation * Quaternion.AngleAxis(10, carRB.transform.forward));
-            carRB.AddRelativeTorque(transform.forward*10000, ForceMode.Force);
+            
             /*foreach(var wheel in wheels)
             {
                 if(wheel.side ==)
@@ -169,6 +164,6 @@ public class PlayerController : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(wheels[3].wheelCollider.transform.position+new Vector3(0, wheels[3].wheelCollider.transform.position.y- wheels[3].wheelCollider.radius*3.25f,0), 1f);
+        //Gizmos.DrawSphere(wheels[3].wheelCollider.transform.position+new Vector3(0, wheels[3].wheelCollider.transform.position.y- wheels[3].wheelCollider.radius*3.25f,0), 1f);
     }
 }
