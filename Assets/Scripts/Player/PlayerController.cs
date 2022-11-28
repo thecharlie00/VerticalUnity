@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 finalVelocity = Vector3.zero;
     private float velocityXZ = 5f;
     private float gravity = 20f;
+    private float brake;
     #endregion
 
 
@@ -57,7 +58,7 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Steer();
-        Brake();
+        //Brake();
         Turbo();
         TwoWheels();
     }
@@ -69,52 +70,46 @@ public class PlayerController : MonoBehaviour
         
     }
     private void Move()
-    {
-        //velocity = maxAcceleration * Time.deltaTime * 600 ;
+    {   
+        if(InputManager._INPUT_MANAGER.leftAxisValue.y == 1 || InputManager._INPUT_MANAGER.leftAxisValue.y == -1)
+        {
+            velocity = maxAcceleration * Time.deltaTime * 600;
+        }
+        if(InputManager._INPUT_MANAGER.leftAxisValue.y ==0)
+        {
+            velocity = 0;
+        }
         Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward;
         direction.Normalize();
         //Calcular velocidad XZ
-        finalVelocity.x = direction.x * maxAcceleration * Time.deltaTime;
-        finalVelocity.z = direction.z * maxAcceleration * Time.deltaTime;
-        if(finalVelocity.z != 0)
-        {
-            transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);
-        }
-        
-        //Asignar dirección Y
+        finalVelocity.x = direction.x * velocity * Time.deltaTime;
+        finalVelocity.z = direction.z * velocity * Time.deltaTime;
+       
+          
         direction.y = -1f;
-        //Calcular gravedad
         finalVelocity.y += direction.y * gravity * Time.deltaTime;
         controller.Move(finalVelocity * Time.deltaTime *100);
     }
     void Steer()
     {
-        foreach (var wheel in wheels)
-        {
-            if(wheel.axel == Axel.FRONT)
-            {
-                var _steerAngle = InputManager._INPUT_MANAGER.leftAxisValue.x * maxSteerAngle * turnSensivity;
-                //wheel.wheelCollider.steerAngle = Mathf.Lerp(wheel.wheelCollider.steerAngle, _steerAngle, 0.6f);
-            }
-        }
+         if(finalVelocity.z != 0)
+         {
+            transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);
+         }
     }
-    void Brake()
+    /*void Brake()
     {
         if(InputManager._INPUT_MANAGER.isBraking == 1)
         {
-            foreach (var wheel in wheels)
-            {
-                //wheel.wheelCollider.brakeTorque = maxBrakeAcceleration * 300 * Time.deltaTime;
-            }
+            brake = maxBrakeAcceleration * 300 * Time.deltaTime;
+            velocity = velocity - brake * Time.deltaTime;
         }
-        else
+        if (velocity <= 0)
         {
-            foreach (var wheel in wheels)
-            {
-                //wheel.wheelCollider.brakeTorque = 0;
-            }
+            velocity = 0;
         }
-    }
+       
+    }*/
     void AnimationWheels()
     {
         /*/foreach (var wheel in wheels)

@@ -554,7 +554,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1.06, z: 0}
 --- !u!1001 &2518340000605150845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -624,7 +624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2518340001439047816, guid: a20f21a2cc2728345bdc950fd997c558, type: 3}
       propertyPath: maxAcceleration
-      value: 200
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2518340001439047816, guid: a20f21a2cc2728345bdc950fd997c558, type: 3}
+      propertyPath: maxBrakeAcceleration
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2518340001439047816, guid: a20f21a2cc2728345bdc950fd997c558, type: 3}
       propertyPath: wheels.Array.data[0].side
