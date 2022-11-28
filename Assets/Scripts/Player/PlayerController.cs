@@ -40,8 +40,12 @@ public class PlayerController : MonoBehaviour
     public CharacterController controller;
     private Vector3 finalVelocity = Vector3.zero;
     private float velocityXZ = 5f;
+    public float steerPower;
     private float gravity = 20f;
     private float brake;
+    private bool isMoving;
+    public float timeToZeroVelocity;
+    private float currentTime;
     #endregion
 
 
@@ -53,12 +57,13 @@ public class PlayerController : MonoBehaviour
         iniMaxAcceleration = maxAcceleration;
         turboOnVelocity = maxVelocity * 2;
         turboOnAcceleration = maxAcceleration * 2;
+        isMoving = false;
     }
     private void LateUpdate()
     {
         Move();
-        Steer();
         //Brake();
+        Steer();
         Turbo();
         TwoWheels();
     }
@@ -70,15 +75,12 @@ public class PlayerController : MonoBehaviour
         
     }
     private void Move()
-    {   
-        if(InputManager._INPUT_MANAGER.leftAxisValue.y == 1 || InputManager._INPUT_MANAGER.leftAxisValue.y == -1)
+    {
+        /*if(InputManager._INPUT_MANAGER.leftAxisValue.y == 1 || InputManager._INPUT_MANAGER.leftAxisValue.y == -1)
         {
             velocity = maxAcceleration * Time.deltaTime * 600;
         }
-        if(InputManager._INPUT_MANAGER.leftAxisValue.y ==0)
-        {
-            velocity = 0;
-        }
+        
         Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward;
         direction.Normalize();
         //Calcular velocidad XZ
@@ -88,14 +90,45 @@ public class PlayerController : MonoBehaviour
           
         direction.y = -1f;
         finalVelocity.y += direction.y * gravity * Time.deltaTime;
-        controller.Move(finalVelocity * Time.deltaTime *100);
+        controller.Move(finalVelocity * Time.deltaTime *100);*/
+        
+       if(InputManager._INPUT_MANAGER.leftAxisValue.y != 0)
+       {
+            velocity = maxAcceleration * Time.deltaTime * 600;
+            steerPower = maxSteerAngle * Time.deltaTime;
+       }
+       if(InputManager._INPUT_MANAGER.leftAxisValue.y == 0)
+       {
+            velocity = 0;
+            steerPower = 0;
+       }
+       if(velocity >= maxVelocity)
+       {
+            velocity = maxVelocity;
+       }
+
+
+        if (finalVelocity.z != 0)
+        {
+            transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);
+        }
+        Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward;
+            direction.Normalize();
+            
+            finalVelocity.x = direction.x * steerPower * Time.deltaTime;
+            finalVelocity.z = direction.z * velocity * Time.deltaTime;
+
+
+            direction.y = -1f;
+            
+            finalVelocity.y += direction.y * gravity * Time.deltaTime;
+            controller.Move(finalVelocity * Time.deltaTime * 100);
+        
     }
+    
     void Steer()
     {
-         if(finalVelocity.z != 0)
-         {
-            transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);
-         }
+        
     }
     /*void Brake()
     {
