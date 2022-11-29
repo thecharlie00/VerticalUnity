@@ -76,22 +76,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Move()
     {
-        /*if(InputManager._INPUT_MANAGER.leftAxisValue.y == 1 || InputManager._INPUT_MANAGER.leftAxisValue.y == -1)
-        {
-            velocity = maxAcceleration * Time.deltaTime * 600;
-        }
-        
-        Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward;
-        direction.Normalize();
-        //Calcular velocidad XZ
-        finalVelocity.x = direction.x * velocity * Time.deltaTime;
-        finalVelocity.z = direction.z * velocity * Time.deltaTime;
        
-          
-        direction.y = -1f;
-        finalVelocity.y += direction.y * gravity * Time.deltaTime;
-        controller.Move(finalVelocity * Time.deltaTime *100);*/
-        
        if(InputManager._INPUT_MANAGER.leftAxisValue.y != 0)
        {
             velocity = maxAcceleration * Time.deltaTime * 600;
@@ -107,22 +92,22 @@ public class PlayerController : MonoBehaviour
             velocity = maxVelocity;
        }
 
-
-        
-        transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);
-        
+        /*transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x, 0.0f);  
         Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward;
-        direction.Normalize();
-            
+        direction.Normalize();           
         finalVelocity.x = direction.x * steerPower * Time.deltaTime;
-        finalVelocity.z = direction.z * velocity * Time.deltaTime;
+        finalVelocity.z = direction.z * velocity * Time.deltaTime;*/
 
+        Vector3 direction = InputManager._INPUT_MANAGER.leftAxisValue.y * transform.forward + InputManager._INPUT_MANAGER.leftAxisValue.x * transform.right;
+        direction.Normalize();
+        transform.Rotate(0.0f, InputManager._INPUT_MANAGER.leftAxisValue.x * steerPower, 0.0f);
+        //Calcular velocidad XZ
+        finalVelocity.x = direction.x * velocity * Time.deltaTime;
+        finalVelocity.z = direction.z * velocity* Time.deltaTime;
 
-        direction.y = -1f;
-            
+        direction.y = -1f;   
         finalVelocity.y += direction.y * gravity * Time.deltaTime;
-        controller.Move(finalVelocity * Time.deltaTime * 100);
-        
+        controller.Move(finalVelocity * Time.deltaTime * 100); 
     }
     
     void Steer()

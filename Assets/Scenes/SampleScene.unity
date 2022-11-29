@@ -13191,7 +13191,7 @@ PrefabInstance:
       objectReference: {fileID: 963194229}
     - target: {fileID: 2518340001439047816, guid: a20f21a2cc2728345bdc950fd997c558, type: 3}
       propertyPath: maxSteerAngle
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 2518340001439047816, guid: a20f21a2cc2728345bdc950fd997c558, type: 3}
       propertyPath: centerOfMass.x
