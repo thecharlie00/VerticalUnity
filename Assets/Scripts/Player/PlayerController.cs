@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private float turboOnAcceleration;
     public float maxRot;
     private float currentRot;
+    private float balanceValue;
     public float balance;
     float moveInput;
     public Rigidbody carRB;
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
         Steer();
         Brake();
         Turbo();
-        TwoWheels();
+        //TwoWheels();
     }
     // Update is called once per frame
     void Update()
@@ -74,10 +75,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {                                  
         velocity = maxAcceleration * Time.deltaTime * 600 * InputManager._INPUT_MANAGER.leftAxisValue.y;
-        if (velocity >= maxVelocity)
-        {
-            velocity = maxVelocity;
-        }
+        Debug.Log(InputManager._INPUT_MANAGER.leftAxisValue.y);
 
         foreach (var wheel in wheels)
         {
@@ -99,7 +97,7 @@ public class PlayerController : MonoBehaviour
     {
         if (InputManager._INPUT_MANAGER.isBraking == 1)
         {
-            Debug.Log("Freno");
+            
             foreach (var wheel in wheels)
             {
                 wheel.wheelCollider.brakeTorque = maxBrakeAcceleration * 300 * Time.deltaTime;
@@ -147,18 +145,20 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(GameManager._GAME_MANAGER.RecoverTurbo());
         }
     }
-    void TwoWheels()
+   /* void TwoWheels()
     {
         if (InputManager._INPUT_MANAGER.isTwoWheels == 1)
         {
-            balance+=Time.deltaTime;
-            Mathf.Clamp(balance, 0, 2);
+            //balance++;
+            balanceValue += Time.deltaTime ;
+            balance = Mathf.Clamp(balanceValue, 0.5f, 7);
             carRB.AddRelativeTorque(transform.forward * balance, ForceMode.Acceleration);
+            Debug.Log(balance);
         }if(InputManager._INPUT_MANAGER.isTwoWheels == 0)
         {
             balance = 0;
         }
-    }
+    }*/
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(wheels[3].wheelCollider.transform.position + new Vector3(0, wheels[3].wheelCollider.transform.position.y - wheels[3].wheelCollider.radius * 3.25f, 0), 1f);
