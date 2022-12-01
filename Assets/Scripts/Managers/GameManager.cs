@@ -12,6 +12,13 @@ public class GameManager : MonoBehaviour
     public bool theresTurboRemaining;
     public bool isActive;
     #endregion
+    #region Mission
+    public GameObject missionBrienfing;
+    public float reward;
+    public GameObject[] ruteSignsEasy;
+    public GameObject[] ruteSignsMedium;
+    public GameObject[] ruteSignsHard;
+    #endregion
     private void Awake()
     {
         if(_GAME_MANAGER != null && _GAME_MANAGER != this)
@@ -27,13 +34,28 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        turboPowerReamining = turboPower;
+       turboPowerReamining = turboPower;
+       missionBrienfing.SetActive(false);
+        for (int i = 0; i < ruteSignsEasy.Length; i++)
+        {
+            ruteSignsEasy[i].SetActive(false);
+        }
+        for (int i = 0; i < ruteSignsMedium.Length; i++)
+        {
+            ruteSignsMedium[i].SetActive(false);
+        }
+        for (int i = 0; i < ruteSignsHard.Length; i++)
+        {
+            ruteSignsHard[i].SetActive(false);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(turboPowerReamining >= 1)
+       
+        if (turboPowerReamining >= 1)
         {
             theresTurboRemaining = true;
         }
@@ -82,5 +104,13 @@ public class GameManager : MonoBehaviour
         TurboOff();
     }
 
-   
+
+   public void Rute1()
+   {
+        for(int i =0; i < ruteSignsEasy.Length - 1; i++)
+        {
+            ruteSignsEasy[i].SetActive(true);
+        }
+        reward = 100f;
+   }
 }
