@@ -145,22 +145,31 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(GameManager._GAME_MANAGER.RecoverTurbo());
         }
     }
-   /* void TwoWheels()
-    {
-        if (InputManager._INPUT_MANAGER.isTwoWheels == 1)
-        {
-            //balance++;
-            balanceValue += Time.deltaTime ;
-            balance = Mathf.Clamp(balanceValue, 0.5f, 7);
-            carRB.AddRelativeTorque(transform.forward * balance, ForceMode.Acceleration);
-            Debug.Log(balance);
-        }if(InputManager._INPUT_MANAGER.isTwoWheels == 0)
-        {
-            balance = 0;
-        }
-    }*/
-    private void OnDrawGizmos()
+    /* void TwoWheels()
+     {
+         if (InputManager._INPUT_MANAGER.isTwoWheels == 1)
+         {
+             //balance++;
+             balanceValue += Time.deltaTime ;
+             balance = Mathf.Clamp(balanceValue, 0.5f, 7);
+             carRB.AddRelativeTorque(transform.forward * balance, ForceMode.Acceleration);
+             Debug.Log(balance);
+         }if(InputManager._INPUT_MANAGER.isTwoWheels == 0)
+         {
+             balance = 0;
+         }
+     }*/
+
+    /*private void OnDrawGizmos()
     {
         Gizmos.DrawSphere(wheels[3].wheelCollider.transform.position + new Vector3(0, wheels[3].wheelCollider.transform.position.y - wheels[3].wheelCollider.radius * 3.25f, 0), 1f);
+    }*/
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "")
+        {
+
+        }
     }
 }

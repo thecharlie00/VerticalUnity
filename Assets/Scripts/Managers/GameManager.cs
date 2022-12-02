@@ -112,5 +112,24 @@ public class GameManager : MonoBehaviour
             ruteSignsEasy[i].SetActive(true);
         }
         reward = 100f;
+        missionBrienfing.SetActive(false);
    }
+    public void Rute2()
+    {
+        for (int i = 0; i < ruteSignsEasy.Length - 1; i++)
+        {
+            ruteSignsMedium[i].SetActive(true);
+        }
+        reward = 1000f;
+        missionBrienfing.SetActive(false);
+    }
+    public void Rute3()
+    {
+        for (int i = 0; i < ruteSignsEasy.Length - 1; i++)
+        {
+            ruteSignsHard[i].SetActive(true);
+        }
+        reward = 10000f;
+        missionBrienfing.SetActive(false);
+    }
 }
