@@ -167,9 +167,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "")
+        if(other.gameObject.tag == "MissionPoint")
         {
-
+            Time.timeScale = 0;
+            GameManager._GAME_MANAGER.missionBrienfing.SetActive(true);
+        }
+        if(other.gameObject.tag == "ArrivingPoint")
+        {
+           
+            if(GameManager._GAME_MANAGER.currentPlayerMoney > 0)
+            {
+                GameManager._GAME_MANAGER.currentPlayerMoney += GameManager._GAME_MANAGER.reward;
+            }
+            else
+            {
+                GameManager._GAME_MANAGER.currentPlayerMoney = GameManager._GAME_MANAGER.reward;
+            }
+            GameManager._GAME_MANAGER.reward = 0;
         }
     }
 }

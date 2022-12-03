@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-
+    #region GameManager
     public static GameManager _GAME_MANAGER;
+    #endregion    
     #region Turbo
     public float turboPower;
     public float turboPowerReamining;
@@ -18,6 +20,12 @@ public class GameManager : MonoBehaviour
     public GameObject[] ruteSignsEasy;
     public GameObject[] ruteSignsMedium;
     public GameObject[] ruteSignsHard;
+    #endregion
+    #region Player
+    public float currentPlayerMoney;
+    #region PlayerUI
+    public Text playerMoney;
+    #endregion
     #endregion
     private void Awake()
     {
@@ -63,6 +71,7 @@ public class GameManager : MonoBehaviour
         {
             turboPowerReamining = turboPower;
         }
+        playerMoney.text = currentPlayerMoney.ToString();
     }
 
     public void TurboOn()
@@ -113,7 +122,9 @@ public class GameManager : MonoBehaviour
         }
         reward = 100f;
         missionBrienfing.SetActive(false);
+        Time.timeScale = 1;
    }
+
     public void Rute2()
     {
         for (int i = 0; i < ruteSignsEasy.Length - 1; i++)
@@ -122,6 +133,7 @@ public class GameManager : MonoBehaviour
         }
         reward = 1000f;
         missionBrienfing.SetActive(false);
+        Time.timeScale = 1;
     }
     public void Rute3()
     {
@@ -131,5 +143,6 @@ public class GameManager : MonoBehaviour
         }
         reward = 10000f;
         missionBrienfing.SetActive(false);
+        Time.timeScale = 1;
     }
 }
