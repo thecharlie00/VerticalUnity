@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ArrivingPoint
   - MissionPoint
+  - DepartPoint
   layers:
   - Default
   - TransparentFX
