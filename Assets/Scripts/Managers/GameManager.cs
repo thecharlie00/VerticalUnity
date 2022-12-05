@@ -15,11 +15,23 @@ public class GameManager : MonoBehaviour
     public bool isActive;
     #endregion
     #region Mission
-    public GameObject missionBrienfing;
-    public float reward;
-    public GameObject[] ruteSignsEasy;
-    public GameObject[] ruteSignsMedium;
-    public GameObject[] ruteSignsHard;
+    int missionIndex = -1;
+    [System.Serializable]
+    public struct Missions
+    {
+        public string missionTitle;
+        public string descriptionTitle;
+        public GameObject missionBrienfing;
+        public GameObject departPoint;
+        public GameObject arrivingPoint;
+        public float reward;
+        public GameObject[] ruteSignsEasy;
+        public GameObject[] ruteSignsMedium;
+        public GameObject[] ruteSignsHard;
+        public bool isCompleted;
+    }
+    [NonReorderable]
+    public List<Missions> mission = new List<Missions>();
     #endregion
     #region Player
     public float currentPlayerMoney;
@@ -42,20 +54,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-       turboPowerReamining = turboPower;
-       missionBrienfing.SetActive(false);
-        for (int i = 0; i < ruteSignsEasy.Length; i++)
-        {
-            ruteSignsEasy[i].SetActive(false);
-        }
-        for (int i = 0; i < ruteSignsMedium.Length; i++)
-        {
-            ruteSignsMedium[i].SetActive(false);
-        }
-        for (int i = 0; i < ruteSignsHard.Length; i++)
-        {
-            ruteSignsHard[i].SetActive(false);
-        }
+        turboPowerReamining = turboPower;
 
     }
 
@@ -72,6 +71,8 @@ public class GameManager : MonoBehaviour
             turboPowerReamining = turboPower;
         }
         playerMoney.text = currentPlayerMoney.ToString();
+        
+        
     }
 
     public void TurboOn()
@@ -116,33 +117,18 @@ public class GameManager : MonoBehaviour
 
    public void Rute1()
    {
-        for(int i =0; i < ruteSignsEasy.Length - 1; i++)
-        {
-            ruteSignsEasy[i].SetActive(true);
-        }
-        reward = 100f;
-        missionBrienfing.SetActive(false);
+       
         Time.timeScale = 1;
    }
 
     public void Rute2()
     {
-        for (int i = 0; i < ruteSignsEasy.Length - 1; i++)
-        {
-            ruteSignsMedium[i].SetActive(true);
-        }
-        reward = 1000f;
-        missionBrienfing.SetActive(false);
+        
         Time.timeScale = 1;
     }
     public void Rute3()
     {
-        for (int i = 0; i < ruteSignsEasy.Length - 1; i++)
-        {
-            ruteSignsHard[i].SetActive(true);
-        }
-        reward = 10000f;
-        missionBrienfing.SetActive(false);
+        
         Time.timeScale = 1;
     }
 }
