@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {                                  
         velocity = maxAcceleration * Time.deltaTime * 600 * InputManager._INPUT_MANAGER.leftAxisValue.y;
-        Debug.Log(InputManager._INPUT_MANAGER.leftAxisValue.y);
+        
 
         foreach (var wheel in wheels)
         {
@@ -169,6 +169,8 @@ public class PlayerController : MonoBehaviour
     {
         if(other.gameObject.tag == "MissionPoint")
         {
+            GameManager._GAME_MANAGER.InitMission();
+            
             Time.timeScale = 0;
             
         }
