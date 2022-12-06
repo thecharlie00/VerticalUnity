@@ -157,6 +157,7 @@ public class GameManager : MonoBehaviour
         }
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
+        mission[currentMission].missionBrienfing.SetActive(false);
     }
 
     public void Rute2()
@@ -169,6 +170,7 @@ public class GameManager : MonoBehaviour
         }
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
+        mission[currentMission].missionBrienfing.SetActive(false);
     }
     public void Rute3()
     {
@@ -180,6 +182,7 @@ public class GameManager : MonoBehaviour
         }
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
+        mission[currentMission].missionBrienfing.SetActive(false);
     }
     public void InitMission()
     {
