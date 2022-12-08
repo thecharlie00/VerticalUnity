@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
         public GameObject missionBrienfing;
         public GameObject departPoint;
         public GameObject arrivingPoint;
+        public float waitTime;
         public float reward;
         public GameObject[] ruteSignsEasy;
         public GameObject[] ruteSignsMedium;
@@ -36,6 +37,8 @@ public class GameManager : MonoBehaviour
     public Text missionTitle;
     public Text missionDescription;
     public GameObject missionBriefing;
+    public float _time_;
+    public bool isWaiting;
     bool ruteSelected;
     #endregion
     #region Player
@@ -97,12 +100,18 @@ public class GameManager : MonoBehaviour
 
             }
         }
-        else
+        if(ruteSelected && !isWaiting)
         {
+           
             mission[currentMission].departPoint.SetActive(true);
         }
         
         mission[currentMission].arrivingPoint.SetActive(false);
+        if (isWaiting)
+        {
+            
+            ScapeWaiting();
+        }
 
 
     }
@@ -149,8 +158,10 @@ public class GameManager : MonoBehaviour
 
    public void Rute1()
    {
+        _time_ = mission[currentMission].waitTime;
         ruteSelected = true;
-        for(int i = 0; i <mission[currentMission].ruteSignsEasy.Length; i++)
+        _time_ = mission[currentMission].waitTime;
+        for (int i = 0; i <mission[currentMission].ruteSignsEasy.Length; i++)
         {
             mission[currentMission].ruteSignsEasy[i].SetActive(true);
 
@@ -162,7 +173,9 @@ public class GameManager : MonoBehaviour
 
     public void Rute2()
     {
+        _time_ = mission[currentMission].waitTime;
         ruteSelected = true;
+        _time_ = mission[currentMission].waitTime;
         for (int i = 0; i < mission[currentMission].ruteSignsMedium.Length; i++)
         {
             mission[currentMission].ruteSignsMedium[i].SetActive(true);
@@ -174,10 +187,13 @@ public class GameManager : MonoBehaviour
     }
     public void Rute3()
     {
+        _time_ = mission[currentMission].waitTime;
         ruteSelected = true;
+        _time_ = mission[currentMission].waitTime;
         for (int i = 0; i < mission[currentMission].ruteSignsHard.Length; i++)
         {
             mission[currentMission].ruteSignsHard[i].SetActive(true);
+           
 
         }
         Time.timeScale = 1;
@@ -199,5 +215,29 @@ public class GameManager : MonoBehaviour
         missionDescription.text = mission[currentMission].descriptionTitle;
         missionBriefing.SetActive(true);
 
+    }
+    public void ScapeWaiting()
+    {
+        
+          
+        
+        
+        if (isWaiting)
+        {
+            
+            _time_ -= Time.deltaTime * 1000;
+        }
+        if(_time_ <= 0)
+        {
+            /*isWaiting = false;
+            mission[currentMission].arrivingPoint.SetActive(true);*/
+            //
+            _time_ = 0;
+            mission[currentMission].departPoint.SetActive(false);
+            isWaiting = false;
+            
+
+
+        }
     }
 }

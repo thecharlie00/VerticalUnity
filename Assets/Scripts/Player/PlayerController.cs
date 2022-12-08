@@ -174,7 +174,8 @@ public class PlayerController : MonoBehaviour
             Time.timeScale = 0;
             
         }
-        if(other.gameObject.tag == "ArrivingPoint")
+        
+        if (other.gameObject.tag == "ArrivingPoint")
         {
            
             if(GameManager._GAME_MANAGER.currentPlayerMoney > 0)
@@ -186,6 +187,16 @@ public class PlayerController : MonoBehaviour
                 
             }
             
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+
+        if (other.gameObject.tag == "DepartPoint")
+        {
+
+            GameManager._GAME_MANAGER.isWaiting = true;
+
         }
     }
 }

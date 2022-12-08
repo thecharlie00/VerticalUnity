@@ -14695,6 +14695,7 @@ MonoBehaviour:
     missionBrienfing: {fileID: 340164235}
     departPoint: {fileID: 1467606244}
     arrivingPoint: {fileID: 233945441}
+    waitTime: 20
     reward: 0
     ruteSignsEasy:
     - {fileID: 378200957}
@@ -14712,6 +14713,8 @@ MonoBehaviour:
   missionTitle: {fileID: 676734544}
   missionDescription: {fileID: 1464763033}
   missionBriefing: {fileID: 815727055}
+  _time_: 0
+  isWaiting: 0
   currentPlayerMoney: 0
   playerMoney: {fileID: 1217242972}
 --- !u!4 &2005697975
