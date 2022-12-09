@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     #region Mission
     public int missionIndex = -1;
     public int currentMission;
+    public bool missionCompleted;
+    public float currentReward;
     [System.Serializable]
     public struct Missions
     {
@@ -106,7 +108,7 @@ public class GameManager : MonoBehaviour
             mission[currentMission].departPoint.SetActive(true);
         }
         
-        mission[currentMission].arrivingPoint.SetActive(false);
+       
         if (isWaiting)
         {
             
@@ -157,8 +159,8 @@ public class GameManager : MonoBehaviour
 
 
    public void Rute1()
-   {
-        _time_ = mission[currentMission].waitTime;
+   {        _time_ = mission[currentMission].waitTime;
+        mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
         _time_ = mission[currentMission].waitTime;
         for (int i = 0; i <mission[currentMission].ruteSignsEasy.Length; i++)
@@ -174,6 +176,7 @@ public class GameManager : MonoBehaviour
     public void Rute2()
     {
         _time_ = mission[currentMission].waitTime;
+        mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
         _time_ = mission[currentMission].waitTime;
         for (int i = 0; i < mission[currentMission].ruteSignsMedium.Length; i++)
@@ -184,10 +187,16 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
         mission[currentMission].missionBrienfing.SetActive(false);
+        var onGoingMission = mission[currentMission];
+        currentReward = onGoingMission.reward;
+        currentReward *= 2;
+        onGoingMission.reward = currentReward;
+        mission[currentMission] = onGoingMission;
     }
     public void Rute3()
     {
         _time_ = mission[currentMission].waitTime;
+        mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
         _time_ = mission[currentMission].waitTime;
         for (int i = 0; i < mission[currentMission].ruteSignsHard.Length; i++)
@@ -199,6 +208,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
         mission[currentMission].missionBrienfing.SetActive(false);
+        var onGoingMission = mission[currentMission];
+        currentReward = onGoingMission.reward;
+        currentReward *= 3;
+        mission[currentMission] = onGoingMission;
+
     }
     public void InitMission()
     {
@@ -233,11 +247,43 @@ public class GameManager : MonoBehaviour
             mission[currentMission].arrivingPoint.SetActive(true);*/
             //
             _time_ = 0;
-            mission[currentMission].departPoint.SetActive(false);
+            mission[currentMission].arrivingPoint.SetActive(true);
             isWaiting = false;
             
 
 
+        }
+    }
+
+    public void EndMission()
+    {
+        var onGoingMission = mission[currentMission];
+        missionCompleted = true;
+        onGoingMission.isCompleted = missionCompleted;
+        mission[currentMission] = onGoingMission;
+        for (int i = 0; i < mission[currentMission].ruteSignsMedium.Length; i++)
+        {
+            mission[currentMission].ruteSignsMedium[i].SetActive(false);
+
+        }
+        for (int i = 0; i < mission[currentMission].ruteSignsMedium.Length; i++)
+        {
+            mission[currentMission].ruteSignsMedium[i].SetActive(false);
+
+        }
+        for (int i = 0; i < mission[currentMission].ruteSignsHard.Length; i++)
+        {
+            mission[currentMission].ruteSignsHard[i].SetActive(false);
+
+
+        }
+        if (currentPlayerMoney > 0)
+        {
+            currentPlayerMoney = mission[currentMission].reward;
+        }
+        else
+        {
+            currentPlayerMoney += mission[currentMission].reward;
         }
     }
 }

@@ -177,15 +177,8 @@ public class PlayerController : MonoBehaviour
         
         if (other.gameObject.tag == "ArrivingPoint")
         {
+            GameManager._GAME_MANAGER.EndMission();
            
-            if(GameManager._GAME_MANAGER.currentPlayerMoney > 0)
-            {
-                
-            }
-            else
-            {
-                
-            }
             
         }
     }
@@ -199,4 +192,5 @@ public class PlayerController : MonoBehaviour
 
         }
     }
+   
 }

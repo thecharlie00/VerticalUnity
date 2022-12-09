@@ -14689,6 +14689,8 @@ MonoBehaviour:
   isActive: 0
   missionIndex: -1
   currentMission: 0
+  missionCompleted: 0
+  currentReward: 0
   mission:
   - missionTitle: Tutorial
     descriptionTitle: Welcome to the tutorial!
@@ -14696,7 +14698,7 @@ MonoBehaviour:
     departPoint: {fileID: 1467606244}
     arrivingPoint: {fileID: 233945441}
     waitTime: 20
-    reward: 0
+    reward: 100
     ruteSignsEasy:
     - {fileID: 378200957}
     - {fileID: 944353150}
