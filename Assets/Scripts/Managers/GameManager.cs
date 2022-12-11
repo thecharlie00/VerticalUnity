@@ -66,14 +66,33 @@ public class GameManager : MonoBehaviour
     {
         turboPowerReamining = turboPower;
         missionBriefing.SetActive(false);
-        
+        for(int i =0; i < mission.Capacity; i++)
+        {
+            for(int j =0; j < mission[i].ruteSignsEasy.Length; j++)
+            {
+                mission[i].ruteSignsEasy[j].SetActive(false);
+            }
+            for (int k = 0; k < mission[i].ruteSignsMedium.Length; k++)
+            {
+                mission[i].ruteSignsMedium[k].SetActive(false);
+            }
+            for (int l = 0; l < mission[i].ruteSignsHard.Length; l++)
+            {
+                mission[i].ruteSignsHard[l].SetActive(false);
+            }
+        }
+       
 
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        if (missionIndex < 0)
+        {
+            missionIndex++;
+        }
+        currentMission = missionIndex;
         if (turboPowerReamining >= 1)
         {
             theresTurboRemaining = true;
@@ -211,20 +230,13 @@ public class GameManager : MonoBehaviour
         var onGoingMission = mission[currentMission];
         currentReward = onGoingMission.reward;
         currentReward *= 3;
+        onGoingMission.reward = currentReward;
         mission[currentMission] = onGoingMission;
 
     }
     public void InitMission()
     {
-        if (missionIndex < 0)
-        {
-            missionIndex++;  
-        }
-        if (mission[currentMission].isCompleted)
-        {
-            missionIndex++;
-        }
-        currentMission = missionIndex;
+        
         missionTitle.text = mission[currentMission].missionTitle;
         missionDescription.text = mission[currentMission].descriptionTitle;
         missionBriefing.SetActive(true);
@@ -277,7 +289,7 @@ public class GameManager : MonoBehaviour
 
 
         }
-        if (currentPlayerMoney > 0)
+        if (currentPlayerMoney == 0)
         {
             currentPlayerMoney = mission[currentMission].reward;
         }
@@ -285,5 +297,11 @@ public class GameManager : MonoBehaviour
         {
             currentPlayerMoney += mission[currentMission].reward;
         }
+        missionIndex++;
+        if(missionIndex >= mission.Capacity)
+        {
+            missionIndex--;
+        }
+        mission[currentMission].missionBrienfing.SetActive(true);
     }
 }

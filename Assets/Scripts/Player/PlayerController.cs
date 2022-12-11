@@ -75,7 +75,10 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {                                  
         velocity = maxAcceleration * Time.deltaTime * 600 * InputManager._INPUT_MANAGER.leftAxisValue.y;
-        
+        if(velocity >= maxVelocity)
+        {
+            velocity = maxVelocity;
+        }
 
         foreach (var wheel in wheels)
         {
