@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     public List<Missions> mission = new List<Missions>();
     public Text missionTitle;
     public Text missionDescription;
+    public Text missionReward;
     public GameObject missionBriefing;
     public float _time_;
     public bool isWaiting;
@@ -55,6 +56,9 @@ public class GameManager : MonoBehaviour
     public GameObject Menu;
     public GameObject Options;
     public GameObject Credits;
+    public GameObject menuInGame;
+    public GameObject optionsInGame;
+    public GameObject menuButtons;
     #endregion
     private void Awake()
     {
@@ -71,6 +75,12 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        if (menuInGame != null && menuButtons != null && optionsInGame != null)
+        {
+            menuInGame.SetActive(false);
+            optionsInGame.SetActive(false);
+            menuButtons.SetActive(false);
+        }
         if(Menu != null && Options != null && Credits != null)
         {
             Menu.SetActive(true);
@@ -280,6 +290,30 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Vertical");
     }
+    public void OpenInGameMenu()
+    {
+        menuInGame.SetActive(true);
+        menuButtons.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void OpenOptionsInGame()
+    {
+        menuButtons.SetActive(false);
+        optionsInGame.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void CloseInGameMenu()
+    {
+        menuInGame.SetActive(false);
+        optionsInGame.SetActive(false);
+        menuButtons.SetActive(false);
+        Time.timeScale = 1;
+    }
+    public void OpenMainMenu()
+    {
+        SceneManager.LoadScene("MenuPrincipal");
+        Time.timeScale = 1;
+    }
     public void InitMission()
     {
         if(missionTitle != null)
@@ -290,6 +324,10 @@ public class GameManager : MonoBehaviour
        {
             missionDescription.text = mission[currentMission].descriptionTitle;
        } 
+       if(missionReward != null)
+       {
+            missionReward.text = mission[currentMission].reward.ToString();
+       }
         missionBriefing.SetActive(true);
 
     }
