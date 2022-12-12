@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     #region GameManager
@@ -50,7 +50,11 @@ public class GameManager : MonoBehaviour
     #endregion
     #endregion
     #region Menu&SplashScreen
-
+    public Scene m_Scene;
+    public string sceneName;
+    public GameObject Menu;
+    public GameObject Options;
+    public GameObject Credits;
     #endregion
     private void Awake()
     {
@@ -67,6 +71,14 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        if(Menu != null && Options != null && Credits != null)
+        {
+            Menu.SetActive(true);
+            Options.SetActive(false);
+            Credits.SetActive(false);
+        }
+        m_Scene = SceneManager.GetActiveScene();
+        sceneName = m_Scene.name;
         turboPowerReamining = turboPower;
         if(missionBriefing != null)
         {
@@ -92,6 +104,13 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+        if(sceneName == "SplashScreen")
+        {
+            if (Input.anyKeyDown)
+            {
+                SceneManager.LoadScene("MenuPrincipal");
+            }
+        }
         if (missionIndex < 0)
         {
             missionIndex++;
@@ -236,6 +255,30 @@ public class GameManager : MonoBehaviour
         onGoingMission.reward = currentReward;
         mission[currentMission] = onGoingMission;
 
+    }
+    public void CreditsOn()
+    {
+        Menu.SetActive(false);
+        Credits.SetActive(true);
+    }
+    public void OptionsOn()
+    {
+        Menu.SetActive(false);
+        Options.SetActive(true);
+    }
+    public void BackToMenu()
+    {
+        Menu.SetActive(true);
+        Options.SetActive(false);
+        Credits.SetActive(false);
+    }
+    public void ExitGame()
+   {
+        Application.Quit();
+   }
+    public void LoadGame()
+    {
+        SceneManager.LoadScene("Vertical");
     }
     public void InitMission()
     {
