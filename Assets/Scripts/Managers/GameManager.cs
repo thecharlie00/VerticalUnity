@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
     public Text playerMoney;
     #endregion
     #endregion
+    #region Menu&SplashScreen
+
+    #endregion
     private void Awake()
     {
         if(_GAME_MANAGER != null && _GAME_MANAGER != this)
@@ -65,7 +68,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         turboPowerReamining = turboPower;
-        missionBriefing.SetActive(false);
+        if(missionBriefing != null)
+        {
+            missionBriefing.SetActive(false);
+        }
         for(int i =0; i < mission.Capacity; i++)
         {
             for(int j =0; j < mission[i].ruteSignsEasy.Length; j++)
@@ -84,8 +90,6 @@ public class GameManager : MonoBehaviour
        
 
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (missionIndex < 0)
@@ -101,8 +105,11 @@ public class GameManager : MonoBehaviour
         {
             turboPowerReamining = turboPower;
         }
-        playerMoney.text = currentPlayerMoney.ToString();
-        if (!ruteSelected)
+        if(playerMoney != null)
+        {
+            playerMoney.text = currentPlayerMoney.ToString();
+        }    
+        if (!ruteSelected && missionTitle !=null)
         {
             mission[currentMission].departPoint.SetActive(false);
             for (int i = 0; i < mission[currentMission].ruteSignsEasy.Length; i++)
@@ -136,7 +143,6 @@ public class GameManager : MonoBehaviour
 
 
     }
-
     public void TurboOn()
     {
         
@@ -155,9 +161,7 @@ public class GameManager : MonoBehaviour
             
         }
         
-    }
-        
-
+    }       
     public void TurboOff()
     {
 
@@ -169,15 +173,12 @@ public class GameManager : MonoBehaviour
         
         
     }
-
     public IEnumerator RecoverTurbo()
     {
         yield return new WaitForSeconds(1f);
         TurboOff();
     }
-
-
-   public void Rute1()
+    public void Rute1()
    {        _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
@@ -188,10 +189,12 @@ public class GameManager : MonoBehaviour
 
         }
         Time.timeScale = 1;
-        missionBriefing.SetActive(false);
+        if(missionBriefing != null)
+        {
+            missionBriefing.SetActive(false);
+        }     
         mission[currentMission].missionBrienfing.SetActive(false);
     }
-
     public void Rute2()
     {
         _time_ = mission[currentMission].waitTime;
@@ -236,9 +239,14 @@ public class GameManager : MonoBehaviour
     }
     public void InitMission()
     {
-        
-        missionTitle.text = mission[currentMission].missionTitle;
-        missionDescription.text = mission[currentMission].descriptionTitle;
+        if(missionTitle != null)
+        {
+            missionTitle.text = mission[currentMission].missionTitle;
+        }
+       if(missionDescription != null)
+       {
+            missionDescription.text = mission[currentMission].descriptionTitle;
+       } 
         missionBriefing.SetActive(true);
 
     }
@@ -266,7 +274,6 @@ public class GameManager : MonoBehaviour
 
         }
     }
-
     public void EndMission()
     {
         var onGoingMission = mission[currentMission];
