@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour
     public Vector3 rotOffset;
 
     public Transform carTarget;
+    public GameObject player;
 
 
 
@@ -22,7 +23,7 @@ public class CameraFollow : MonoBehaviour
     private void FixedUpdate()
     {
         FollowPlayer();
-
+        
         if (GameManager._GAME_MANAGER.isActive)
         {
             
@@ -34,6 +35,11 @@ public class CameraFollow : MonoBehaviour
             offset = iniOffset;
         }
         
+    }
+    private void Update()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        carTarget = player.transform;
     }
     void FollowPlayer()
     {

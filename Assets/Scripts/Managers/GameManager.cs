@@ -39,13 +39,17 @@ public class GameManager : MonoBehaviour
     public Text missionTitle;
     public Text missionDescription;
     public Text missionReward;
+    public Text countDown;
     public GameObject missionBriefing;
+    public GameObject _countdown;
     public float _time_;
     public bool isWaiting;
     bool ruteSelected;
     #endregion
     #region Player
     public float currentPlayerMoney;
+    public GameObject player;
+    public Transform resetPoint;
     #region PlayerUI
     public Text playerMoney;
     #endregion
@@ -87,6 +91,10 @@ public class GameManager : MonoBehaviour
             Options.SetActive(false);
             Credits.SetActive(false);
         }
+        if(_countdown != null)
+        {
+            _countdown.SetActive(false);
+        }
         m_Scene = SceneManager.GetActiveScene();
         sceneName = m_Scene.name;
         turboPowerReamining = turboPower;
@@ -114,6 +122,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+        Debug.Log(_time_);
         if(sceneName == "SplashScreen")
         {
             if (Input.anyKeyDown)
@@ -333,15 +342,17 @@ public class GameManager : MonoBehaviour
     }
     public void ScapeWaiting()
     {
-        
-          
-        
+
+
+        _countdown.SetActive(true);
         
         if (isWaiting)
         {
-            
-            _time_ -= Time.deltaTime * 1000;
+
+            _time_ -= Time.deltaTime * 10;
+            countDown.text = _time_.ToString();
         }
+       
         if(_time_ <= 0)
         {
             /*isWaiting = false;
@@ -349,10 +360,22 @@ public class GameManager : MonoBehaviour
             //
             _time_ = 0;
             mission[currentMission].arrivingPoint.SetActive(true);
+            if(_countdown != null)
+            {
+                _countdown.SetActive(false);
+            }
             isWaiting = false;
+            
             
 
 
+        }
+    }
+    public void DecreaseWaitTime()
+    {
+        if(_time_ < 0)
+        {
+            _time_ -= 1;
         }
     }
     public void EndMission()
@@ -392,4 +415,11 @@ public class GameManager : MonoBehaviour
         }
         mission[currentMission].missionBrienfing.SetActive(true);
     }
+
+    public void ResetPlayer()
+    {
+        Destroy(player);
+        Instantiate(player, resetPoint.position, resetPoint.rotation);
+    }
+
 }

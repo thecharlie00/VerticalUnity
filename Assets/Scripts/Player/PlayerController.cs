@@ -45,7 +45,15 @@ public class PlayerController : MonoBehaviour
     float moveInput;
     public Rigidbody carRB;
     #endregion
-
+   /* #region Sound
+    public float minSpeed;
+    public float maxSpeed;
+    private float currentSpeed;
+    public AudioSource carAudio;
+    public float minPitch;
+    public float maxPitch;
+    private float pitchFromCar;
+    #endregion*/
 
 
     void Start()
@@ -70,6 +78,13 @@ public class PlayerController : MonoBehaviour
     {
 
         AnimationWheels();
+        //EngineSound();
+        if (Input.GetKeyDown(KeyCode.R)){
+            GameManager._GAME_MANAGER.ResetPlayer();
+        }
+        
+
+        
 
     }
     private void Move()
@@ -163,9 +178,25 @@ public class PlayerController : MonoBehaviour
          }
      }*/
 
-    /*private void OnDrawGizmos()
+   /* void EngineSound()
     {
-        Gizmos.DrawSphere(wheels[3].wheelCollider.transform.position + new Vector3(0, wheels[3].wheelCollider.transform.position.y - wheels[3].wheelCollider.radius * 3.25f, 0), 1f);
+        currentSpeed = velocity;
+        pitchFromCar = velocity / 60f;
+
+        if (currentSpeed < minSpeed)
+        {
+            carAudio.pitch = minPitch;
+        }
+
+        if (currentSpeed > minSpeed && currentSpeed < maxSpeed)
+        {
+            carAudio.pitch = minPitch + pitchFromCar;
+        }
+
+        if (currentSpeed > maxSpeed)
+        {
+            carAudio.pitch = maxPitch;
+        }
     }*/
 
     private void OnTriggerEnter(Collider other)
@@ -195,5 +226,14 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-   
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "DepartPoint")
+        {
+
+            GameManager._GAME_MANAGER.isWaiting = false;
+
+        }
+    }
+
 }
