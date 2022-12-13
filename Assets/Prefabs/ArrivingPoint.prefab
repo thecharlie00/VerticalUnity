@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5615263324912645620}
   - component: {fileID: 5615263324912645619}
   - component: {fileID: 5615263324912645618}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ArrivingPoint
   m_TagString: ArrivingPoint
   m_Icon: {fileID: 0}

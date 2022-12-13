@@ -44,6 +44,8 @@ public class PlayerController : MonoBehaviour
     public float balance;
     float moveInput;
     public Rigidbody carRB;
+    public GameObject _light1;
+    public GameObject _light2;
     #endregion
    /* #region Sound
     public float minSpeed;
@@ -58,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("hOLA");
+        
         carRB.centerOfMass = centerOfMass;
         iniMaxVelocity = maxVelocity;
         iniMaxAcceleration = maxAcceleration;
@@ -83,22 +85,47 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R)){
             GameManager._GAME_MANAGER.ResetPlayer();
         }
-        
 
+        RaycastHit hit;
         
+        if (Physics.Linecast(_light1.transform.position, _light1.transform.position+new Vector3(transform.forward.x, transform.forward.y , transform.forward.z ), out hit)){
+           
+            Debug.Log("hit");
+            carRB.velocity = Vector3.zero;
+        }
+        Debug.DrawLine(_light1.transform.position, _light1.transform.position + new Vector3(transform.forward.x, transform.forward.y, transform.forward.z), Color.yellow);
 
     }
     private void Move()
     {                                  
-        velocity = maxAcceleration * Time.deltaTime * 600 * InputManager._INPUT_MANAGER.leftAxisValue.y;
+        velocity = maxAcceleration * Time.deltaTime * 100 * InputManager._INPUT_MANAGER.leftAxisValue.y;
         if(velocity >= maxVelocity)
         {
             velocity = maxVelocity;
         }
-
+        if(InputManager._INPUT_MANAGER.leftAxisValue.y == -1)
+        {
+            velocity = maxAcceleration * Time.deltaTime * 1000 * InputManager._INPUT_MANAGER.leftAxisValue.y;
+        }
+        if(velocity < -100)
+        {
+            velocity = -100;
+        }
+        if(InputManager._INPUT_MANAGER.leftAxisValue.y == 0 && velocity>0)
+        {
+            velocity -= maxAcceleration * Time.deltaTime * 1000;
+        }
+        if (InputManager._INPUT_MANAGER.leftAxisValue.y == 0 && velocity < 0)
+        {
+            velocity += maxAcceleration * Time.deltaTime * 1000;
+        }
+       
+           // carRB.velocity = Vector3.zero;
+        
+        
         foreach (var wheel in wheels)
         {
-            wheel.wheelCollider.motorTorque = velocity * Time.deltaTime * 600;
+            wheel.wheelCollider.motorTorque = velocity * Time.deltaTime * 300;
         }
     }
     void Steer()

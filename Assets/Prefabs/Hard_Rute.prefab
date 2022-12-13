@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8486353401838976481}
   - component: {fileID: 4785724284809327172}
   - component: {fileID: 7317990577861412494}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Hard_Rute
   m_TagString: Untagged
   m_Icon: {fileID: 0}

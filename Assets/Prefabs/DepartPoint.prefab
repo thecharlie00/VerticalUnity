@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5965233243635730186}
   - component: {fileID: 5965233243635730187}
   - component: {fileID: 5965233243635730184}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DepartPoint
   m_TagString: DepartPoint
   m_Icon: {fileID: 0}

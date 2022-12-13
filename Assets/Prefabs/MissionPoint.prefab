@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 420784449853446165}
   - component: {fileID: 420784449853446166}
   - component: {fileID: 420784449853446167}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: MissionPoint
   m_TagString: MissionPoint
   m_Icon: {fileID: 0}
