@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        Debug.Log(_time_);
+       
         if(sceneName == "SplashScreen")
         {
             if (Input.anyKeyDown)
@@ -311,6 +311,12 @@ public class GameManager : MonoBehaviour
         optionsInGame.SetActive(true);
         Time.timeScale = 0;
     }
+    public void CloseOptionsInGame()
+    {
+        menuButtons.SetActive(true);
+        optionsInGame.SetActive(false);
+        Time.timeScale = 0;
+    }
     public void CloseInGameMenu()
     {
         menuInGame.SetActive(false);
@@ -418,8 +424,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetPlayer()
     {
-        Destroy(player);
-        Instantiate(player, resetPoint.position, resetPoint.rotation);
+        player.transform.position = resetPoint.position;
     }
 
 }

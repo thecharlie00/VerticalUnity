@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("hOLA");
         carRB.centerOfMass = centerOfMass;
         iniMaxVelocity = maxVelocity;
         iniMaxAcceleration = maxAcceleration;
