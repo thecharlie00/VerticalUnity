@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "ArrivingPointFinañ")
         {
 
-            SceneManager.LoadScene("End");
+            SceneManager.LoadScene("TheEnd");
 
         }
     }

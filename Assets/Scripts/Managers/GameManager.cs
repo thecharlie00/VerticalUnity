@@ -294,7 +294,7 @@ public class GameManager : MonoBehaviour
             DecreaseWaitTime();
             if (mission[currentMission].isTimeTrial == true && _time_ <= 0 && mission[currentMission].isCompleted == false)
             {
-                SceneManager.LoadScene("End");
+                SceneManager.LoadScene("TheEnd");
             }
             else if(mission[currentMission].isTimeTrial == true && _time_ <= 0 && mission[currentMission].isCompleted == false)
             {
