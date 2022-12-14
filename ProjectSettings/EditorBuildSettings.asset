@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Escenas Vertical/Vertical.unity
     guid: 3ed2f0201536ec348868b1052de8a5c7
+  - enabled: 1
+    path: Assets/Scenes/Escenas Vertical/TheEnd.unity
+    guid: a33f7dde5942236428b4cb367ecff579
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: eb8dd850b858bdc49b1abad6ee5a9a48, type: 2}

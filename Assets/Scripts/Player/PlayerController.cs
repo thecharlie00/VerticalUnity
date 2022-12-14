@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody carRB;
     public GameObject _light1;
     public GameObject _light2;
+    public Text velocityUI;
     #endregion
    /* #region Sound
     public float minSpeed;
@@ -81,10 +83,28 @@ public class PlayerController : MonoBehaviour
     {
 
         AnimationWheels();
+        if(velocityUI != null)
+        {
+            velocityUI.text = velocity.ToString();
+        }
+        
         //EngineSound();
         if (Input.GetKeyDown(KeyCode.R)){
             GameManager._GAME_MANAGER.ResetPlayer();
         }
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            
+            GameManager._GAME_MANAGER.OpenShop();
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            GameManager._GAME_MANAGER.MoneyCheat();
+        }
+        
+            maxVelocity = GameManager._GAME_MANAGER.velUpgrade_;
+
+        Debug.Log(maxVelocity);
 
         RaycastHit hit;
         
@@ -191,41 +211,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(GameManager._GAME_MANAGER.RecoverTurbo());
         }
     }
-    /* void TwoWheels()
-     {
-         if (InputManager._INPUT_MANAGER.isTwoWheels == 1)
-         {
-             //balance++;
-             balanceValue += Time.deltaTime ;
-             balance = Mathf.Clamp(balanceValue, 0.5f, 7);
-             carRB.AddRelativeTorque(transform.forward * balance, ForceMode.Acceleration);
-             Debug.Log(balance);
-         }if(InputManager._INPUT_MANAGER.isTwoWheels == 0)
-         {
-             balance = 0;
-         }
-     }*/
-
-   /* void EngineSound()
-    {
-        currentSpeed = velocity;
-        pitchFromCar = velocity / 60f;
-
-        if (currentSpeed < minSpeed)
-        {
-            carAudio.pitch = minPitch;
-        }
-
-        if (currentSpeed > minSpeed && currentSpeed < maxSpeed)
-        {
-            carAudio.pitch = minPitch + pitchFromCar;
-        }
-
-        if (currentSpeed > maxSpeed)
-        {
-            carAudio.pitch = maxPitch;
-        }
-    }*/
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -242,6 +228,12 @@ public class PlayerController : MonoBehaviour
             GameManager._GAME_MANAGER.EndMission();
            
             
+        }
+        if (other.gameObject.tag == "ArrivingPointFinañ")
+        {
+
+            SceneManager.LoadScene("End");
+
         }
     }
     private void OnTriggerStay(Collider other)

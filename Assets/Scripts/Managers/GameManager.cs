@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour
     public float currentPlayerMoney;
     public GameObject player;
     public Transform resetPoint;
+    public Text turboLeft;
+    public Image turboVar;
     #region PlayerUI
     public Text playerMoney;
     #endregion
@@ -72,6 +74,14 @@ public class GameManager : MonoBehaviour
     public GameObject menuInGame;
     public GameObject optionsInGame;
     public GameObject menuButtons;
+    #endregion
+    #region Shop
+    public GameObject shopObject;
+    public PlayerController playerController;
+    public bool isOpen;
+    public bool turboUpgraded;
+    public bool velUpgraded;
+    public float velUpgrade_;
     #endregion
     private void Awake()
     {
@@ -88,6 +98,11 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        if(playerController != null)
+        {
+            velUpgrade_ = playerController.maxVelocity;
+        }
+       
         if (_startTrialButton != null)
         {
             _startTrialButton.SetActive(false);
@@ -112,6 +127,10 @@ public class GameManager : MonoBehaviour
         {
             _timeTrial.SetActive(false);
         }
+        if(shopObject != null)
+        {
+            shopObject.SetActive(false);
+        }
         m_Scene = SceneManager.GetActiveScene();
         sceneName = m_Scene.name;
         turboPowerReamining = turboPower;
@@ -121,6 +140,12 @@ public class GameManager : MonoBehaviour
         }
         for(int i =0; i < mission.Capacity; i++)
         {
+            if (mission[i].isTimeTrial)
+            {
+                var ruteTT = mission[i];
+                ruteTT.ruteSignsTimeTrial = GameObject.FindGameObjectsWithTag("TimeTrialSigns");
+                mission[i] = ruteTT;
+            }
             for(int j =0; j < mission[i].ruteSignsEasy.Length; j++)
             {
                 if(mission[i].ruteSignsEasy[j] != null)
@@ -154,20 +179,35 @@ public class GameManager : MonoBehaviour
 
             }
         }
-       
+        
 
     }
     void Update()
     {
-       
+        if (turboLeft != null)
+        {
+            turboLeft.text = turboPowerReamining.ToString();
+
+        }
+        if (turboVar != null)
+        {
+            turboVar.fillAmount = turboPowerReamining / 100;
+        }
+        
+        if (turboUpgraded)
+        {
+            turboPowerReamining = turboPower;
+            turboUpgraded = false;
+        }
         if(sceneName == "SplashScreen")
         {
+            
             if (Input.anyKeyDown)
             {
                 SceneManager.LoadScene("MenuPrincipal");
             }
         }
-        if (missionIndex < 0)
+        if (missionIndex < 0 )
         {
             missionIndex++;
         }
@@ -216,20 +256,37 @@ public class GameManager : MonoBehaviour
 
             }
         }
-        if (mission[currentMission].isTimeTrial)
+        if(sceneName == "SplashScreen" && sceneName == "MenuPrincipal" && sceneName == "TheEnd")
         {
-            _ruteButtons.SetActive(false);
-            _startTrialButton.SetActive(true);
+            if (mission[currentMission].isTimeTrial)
+            {
+                if (_ruteButtons != null && _startTrialButton != null)
+                {
+                    _ruteButtons.SetActive(false);
+                    _startTrialButton.SetActive(true);
+                }
+
+            }
+            if (mission[currentMission].isTimeTrial == false)
+            {
+                if (_ruteButtons != null && _startTrialButton != null)
+                {
+                    _ruteButtons.SetActive(true);
+                    _startTrialButton.SetActive(false);
+                }
+            }
         }
-        if (mission[currentMission].isTimeTrial == false)
-        {
-            _ruteButtons.SetActive(true);
-            _startTrialButton.SetActive(false);
-        }
+            
+        
+       
+        
         if (ruteSelected && !isWaiting)
         {
-           
-            mission[currentMission].departPoint.SetActive(true);
+            if (mission[currentMission].departPoint != null)
+            {
+                mission[currentMission].departPoint.SetActive(true);
+            }
+            
         }
 
         if (startsTrial)
@@ -237,24 +294,24 @@ public class GameManager : MonoBehaviour
             DecreaseWaitTime();
             if (mission[currentMission].isTimeTrial == true && _time_ <= 0 && mission[currentMission].isCompleted == false)
             {
-                Time.timeScale = 0;
+                SceneManager.LoadScene("End");
             }
-            if (mission[currentMission].isTimeTrial == true && _time_ > 0 && mission[currentMission].isCompleted == true)
+            else if(mission[currentMission].isTimeTrial == true && _time_ <= 0 && mission[currentMission].isCompleted == false)
             {
-                Time.timeScale = 0;
+                Debug.Log("sdaads");
+                //SceneManager.LoadScene("End");
             }
         }
+        
         if (isWaiting)
         {
             
             ScapeWaiting();
-        }
-        
-        
+        }  
     }
+    #region TurboSystem
     public void TurboOn()
-    {
-        
+    {   
         if (theresTurboRemaining && turboPowerReamining >=0)
         {
             turboPowerReamining -= Time.deltaTime * 10;
@@ -268,27 +325,24 @@ public class GameManager : MonoBehaviour
         {
             turboPowerReamining = 0;
             
-        }
-        
+        } 
     }       
     public void TurboOff()
     {
-
-       
         if(turboPowerReamining < 100)
         {
             turboPowerReamining+=Time.deltaTime;
-        }
-        
-        
+        }   
     }
     public IEnumerator RecoverTurbo()
     {
         yield return new WaitForSeconds(1f);
         TurboOff();
     }
+    #endregion
+    #region Rutes
     public void Rute1()
-   {        _time_ = mission[currentMission].waitTime;
+    {        _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
         _time_ = mission[currentMission].waitTime;
@@ -326,7 +380,6 @@ public class GameManager : MonoBehaviour
     }
     public void Rute3()
     {
-       
         _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
@@ -349,23 +402,21 @@ public class GameManager : MonoBehaviour
     }
     public void TimeTrialRute()
     {
-       
+        
         startsTrial = true;
-        _time_ = mission[currentMission].waitTime;
         _timeToBeat = mission[currentMission].timeToBeat;
         _time_ = _timeToBeat;
         ruteSelected = true;
         mission[currentMission].arrivingPoint.SetActive(true);
-        mission[currentMission].departPoint.SetActive(false);
         for (int i = 0; i < mission[currentMission].ruteSignsTimeTrial.Length; i++)
         {
             mission[currentMission].ruteSignsTimeTrial[i].SetActive(true);
 
 
         }
-        Time.timeScale = 1;
         _timeTrial.SetActive(false);
         missionBriefing.SetActive(false);
+        Time.timeScale = 1;
         mission[currentMission].missionBrienfing.SetActive(false);
         var onGoingMission = mission[currentMission];
         currentReward = onGoingMission.reward;
@@ -373,6 +424,8 @@ public class GameManager : MonoBehaviour
         onGoingMission.reward = currentReward;
         mission[currentMission] = onGoingMission;
     }
+    #endregion
+    #region ButtonsFunctions
     public void CreditsOn()
     {
         Menu.SetActive(false);
@@ -427,6 +480,77 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MenuPrincipal");
         Time.timeScale = 1;
     }
+    public void OpenShop()
+    {
+        isOpen = true;
+        
+        shopObject.SetActive(true);
+        Time.timeScale = 0;
+    }
+    public void CloseShop()
+    {
+        isOpen = false;
+        shopObject.SetActive(false);
+        Time.timeScale = 1;
+    }
+    public void UpgradeTurbo()
+    {
+
+
+
+
+       
+        if (currentPlayerMoney >= 200 )
+        {
+            
+            turboPower *= 2;
+            currentPlayerMoney -= 200;
+            turboUpgraded = true;
+            
+           
+            
+        }
+        if (turboPower == 1600)
+        {
+            turboPower = 800;
+
+        }
+
+
+
+
+
+    }
+    public void UpgradeVel()
+    {
+
+
+
+
+
+        if (currentPlayerMoney >= 300)
+        {
+
+            velUpgrade_ *= 2;
+            currentPlayerMoney -= 300;
+            velUpgraded = true;
+
+
+
+        }
+        if (playerController.maxVelocity == 1600)
+        {
+            playerController.maxVelocity = 800;
+
+        }
+
+
+
+
+
+    }
+    #endregion
+    #region MissionFunctions
     public void InitMission()
     {
         if(missionTitle != null)
@@ -538,10 +662,16 @@ public class GameManager : MonoBehaviour
         }
         mission[currentMission].missionBrienfing.SetActive(true);
     }
-
+    #endregion
+    #region Cheats
     public void ResetPlayer()
     {
         player.transform.position = resetPoint.position;
     }
+    public void MoneyCheat()
+    {
+        currentPlayerMoney += 100;
+    }
+    #endregion
 
 }
