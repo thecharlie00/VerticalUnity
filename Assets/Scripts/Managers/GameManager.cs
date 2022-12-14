@@ -27,11 +27,14 @@ public class GameManager : MonoBehaviour
         public GameObject missionBrienfing;
         public GameObject departPoint;
         public GameObject arrivingPoint;
+        public bool isTimeTrial;
+        public float timeToBeat;
         public float waitTime;
         public float reward;
         public GameObject[] ruteSignsEasy;
         public GameObject[] ruteSignsMedium;
         public GameObject[] ruteSignsHard;
+        public GameObject[] ruteSignsTimeTrial;
         public bool isCompleted;
     }
     [NonReorderable]
@@ -40,10 +43,16 @@ public class GameManager : MonoBehaviour
     public Text missionDescription;
     public Text missionReward;
     public Text countDown;
+    public Text timeToBeat;
     public GameObject missionBriefing;
     public GameObject _countdown;
+    public GameObject _timeTrial;
+    public GameObject _ruteButtons;
+    public GameObject _startTrialButton;
     public float _time_;
+    public float _timeToBeat;
     public bool isWaiting;
+    public bool startsTrial;
     bool ruteSelected;
     #endregion
     #region Player
@@ -79,6 +88,10 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        if (_startTrialButton != null)
+        {
+            _startTrialButton.SetActive(false);
+        }
         if (menuInGame != null && menuButtons != null && optionsInGame != null)
         {
             menuInGame.SetActive(false);
@@ -95,6 +108,10 @@ public class GameManager : MonoBehaviour
         {
             _countdown.SetActive(false);
         }
+        if(_timeTrial != null)
+        {
+            _timeTrial.SetActive(false);
+        }
         m_Scene = SceneManager.GetActiveScene();
         sceneName = m_Scene.name;
         turboPowerReamining = turboPower;
@@ -106,15 +123,35 @@ public class GameManager : MonoBehaviour
         {
             for(int j =0; j < mission[i].ruteSignsEasy.Length; j++)
             {
-                mission[i].ruteSignsEasy[j].SetActive(false);
+                if(mission[i].ruteSignsEasy[j] != null)
+                {
+                    mission[i].ruteSignsEasy[j].SetActive(false);
+                }
+                
             }
             for (int k = 0; k < mission[i].ruteSignsMedium.Length; k++)
             {
-                mission[i].ruteSignsMedium[k].SetActive(false);
+                if(mission[i].ruteSignsMedium[k] != null)
+                {
+                    mission[i].ruteSignsMedium[k].SetActive(false);
+                }
+                
             }
             for (int l = 0; l < mission[i].ruteSignsHard.Length; l++)
             {
-                mission[i].ruteSignsHard[l].SetActive(false);
+                if (mission[i].ruteSignsHard[l] != null)
+                {
+                    mission[i].ruteSignsHard[l].SetActive(false);
+                }
+                
+            }
+            for (int l = 0; l < mission[i].ruteSignsTimeTrial.Length; l++)
+            {
+                if (mission[i].ruteSignsTimeTrial[l] != null)
+                {
+                    mission[i].ruteSignsTimeTrial[l].SetActive(false);
+                }
+
             }
         }
        
@@ -134,6 +171,7 @@ public class GameManager : MonoBehaviour
         {
             missionIndex++;
         }
+       
         currentMission = missionIndex;
         if (turboPowerReamining >= 1)
         {
@@ -152,34 +190,67 @@ public class GameManager : MonoBehaviour
             mission[currentMission].departPoint.SetActive(false);
             for (int i = 0; i < mission[currentMission].ruteSignsEasy.Length; i++)
             {
-                mission[currentMission].ruteSignsEasy[i].SetActive(false);
+                if(mission[currentMission].ruteSignsEasy[i] != null)
+                {
+                    mission[currentMission].ruteSignsEasy[i].SetActive(false);
+                }
+                
 
             }
             for (int i = 0; i < mission[currentMission].ruteSignsMedium.Length; i++)
             {
-                mission[currentMission].ruteSignsMedium[i].SetActive(false);
+                if(mission[currentMission].ruteSignsMedium[i] != null)
+                {
+                    mission[currentMission].ruteSignsMedium[i].SetActive(false);
+                }
+               
 
             }
             for (int i = 0; i < mission[currentMission].ruteSignsHard.Length; i++)
             {
-                mission[currentMission].ruteSignsHard[i].SetActive(false);
+                if (mission[currentMission].ruteSignsHard[i] != null)
+                {
+                    mission[currentMission].ruteSignsHard[i].SetActive(false);
+                }
+                
 
             }
         }
-        if(ruteSelected && !isWaiting)
+        if (mission[currentMission].isTimeTrial)
+        {
+            _ruteButtons.SetActive(false);
+            _startTrialButton.SetActive(true);
+        }
+        if (mission[currentMission].isTimeTrial == false)
+        {
+            _ruteButtons.SetActive(true);
+            _startTrialButton.SetActive(false);
+        }
+        if (ruteSelected && !isWaiting)
         {
            
             mission[currentMission].departPoint.SetActive(true);
         }
-        
-       
+
+        if (startsTrial)
+        {
+            DecreaseWaitTime();
+            if (mission[currentMission].isTimeTrial == true && _time_ <= 0 && mission[currentMission].isCompleted == false)
+            {
+                Time.timeScale = 0;
+            }
+            if (mission[currentMission].isTimeTrial == true && _time_ > 0 && mission[currentMission].isCompleted == true)
+            {
+                Time.timeScale = 0;
+            }
+        }
         if (isWaiting)
         {
             
             ScapeWaiting();
         }
-
-
+        
+        
     }
     public void TurboOn()
     {
@@ -255,6 +326,7 @@ public class GameManager : MonoBehaviour
     }
     public void Rute3()
     {
+       
         _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
@@ -274,6 +346,32 @@ public class GameManager : MonoBehaviour
         onGoingMission.reward = currentReward;
         mission[currentMission] = onGoingMission;
 
+    }
+    public void TimeTrialRute()
+    {
+       
+        startsTrial = true;
+        _time_ = mission[currentMission].waitTime;
+        _timeToBeat = mission[currentMission].timeToBeat;
+        _time_ = _timeToBeat;
+        ruteSelected = true;
+        mission[currentMission].arrivingPoint.SetActive(true);
+        mission[currentMission].departPoint.SetActive(false);
+        for (int i = 0; i < mission[currentMission].ruteSignsTimeTrial.Length; i++)
+        {
+            mission[currentMission].ruteSignsTimeTrial[i].SetActive(true);
+
+
+        }
+        Time.timeScale = 1;
+        _timeTrial.SetActive(false);
+        missionBriefing.SetActive(false);
+        mission[currentMission].missionBrienfing.SetActive(false);
+        var onGoingMission = mission[currentMission];
+        currentReward = onGoingMission.reward;
+        currentReward *= 10;
+        onGoingMission.reward = currentReward;
+        mission[currentMission] = onGoingMission;
     }
     public void CreditsOn()
     {
@@ -343,6 +441,11 @@ public class GameManager : MonoBehaviour
        {
             missionReward.text = mission[currentMission].reward.ToString();
        }
+       if (mission[currentMission].isTimeTrial)
+       {
+            _timeTrial.SetActive(true);
+            timeToBeat.text = mission[currentMission].timeToBeat.ToString();
+       }
         missionBriefing.SetActive(true);
 
     }
@@ -365,6 +468,7 @@ public class GameManager : MonoBehaviour
             mission[currentMission].arrivingPoint.SetActive(true);*/
             //
             _time_ = 0;
+     
             mission[currentMission].arrivingPoint.SetActive(true);
             if(_countdown != null)
             {
@@ -379,13 +483,21 @@ public class GameManager : MonoBehaviour
     }
     public void DecreaseWaitTime()
     {
-        if(_time_ < 0)
+       
+        _countdown.SetActive(true);
+        if(_time_ > 0)
         {
-            _time_ -= 1;
+            _time_ -= Time.deltaTime * 10;
         }
+        if (_time_ <= 0)
+        {
+            _time_ = 0;
+        }
+        countDown.text = _time_.ToString();
     }
     public void EndMission()
     {
+        startsTrial = false;
         var onGoingMission = mission[currentMission];
         missionCompleted = true;
         onGoingMission.isCompleted = missionCompleted;
@@ -406,6 +518,7 @@ public class GameManager : MonoBehaviour
 
 
         }
+       
         if (currentPlayerMoney == 0)
         {
             currentPlayerMoney = mission[currentMission].reward;
@@ -414,6 +527,10 @@ public class GameManager : MonoBehaviour
         {
             currentPlayerMoney += mission[currentMission].reward;
         }
+        mission[currentMission].missionBrienfing.SetActive(false);
+        mission[currentMission].arrivingPoint.SetActive(false);
+        mission[currentMission].departPoint.SetActive(false);
+        _countdown.SetActive(false);
         missionIndex++;
         if(missionIndex >= mission.Capacity)
         {
