@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     public float turboPowerReamining;
     public bool theresTurboRemaining;
     public bool isActive;
+    public bool hasPlayed;
+    public AudioSource turbo;
+    public bool hasSounded;
     #endregion
     #region Mission
     public int missionIndex = -1;
@@ -54,6 +57,8 @@ public class GameManager : MonoBehaviour
     public bool isWaiting;
     public bool startsTrial;
     bool ruteSelected;
+
+    public AudioSource completeSound;
     #endregion
     #region Player
     public float currentPlayerMoney;
@@ -63,6 +68,7 @@ public class GameManager : MonoBehaviour
     public Image turboVar;
     #region PlayerUI
     public Text playerMoney;
+    public AudioSource click;
     #endregion
     #endregion
     #region Menu&SplashScreen
@@ -228,6 +234,8 @@ public class GameManager : MonoBehaviour
         if (!ruteSelected && missionTitle !=null)
         {
             mission[currentMission].departPoint.SetActive(false);
+            hasSounded = false;
+                completeSound.Play();
             for (int i = 0; i < mission[currentMission].ruteSignsEasy.Length; i++)
             {
                 if(mission[currentMission].ruteSignsEasy[i] != null)
@@ -256,7 +264,7 @@ public class GameManager : MonoBehaviour
 
             }
         }
-        if(sceneName == "SplashScreen" && sceneName == "MenuPrincipal" && sceneName == "TheEnd")
+        if(sceneName != "SplashScreen" && sceneName != "MenuPrincipal" && sceneName != "TheEnd")
         {
             if (mission[currentMission].isTimeTrial)
             {
@@ -311,7 +319,14 @@ public class GameManager : MonoBehaviour
     }
     #region TurboSystem
     public void TurboOn()
-    {   
+    {
+        
+        if (hasPlayed == false)
+        {
+            turbo.Play();
+            hasPlayed = true;
+        }
+        
         if (theresTurboRemaining && turboPowerReamining >=0)
         {
             turboPowerReamining -= Time.deltaTime * 10;
@@ -324,6 +339,7 @@ public class GameManager : MonoBehaviour
         if (!theresTurboRemaining)
         {
             turboPowerReamining = 0;
+            hasPlayed = false;
             
         } 
     }       
@@ -342,7 +358,9 @@ public class GameManager : MonoBehaviour
     #endregion
     #region Rutes
     public void Rute1()
-    {        _time_ = mission[currentMission].waitTime;
+    {
+        click.Play();
+        _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
         _time_ = mission[currentMission].waitTime;
@@ -355,11 +373,14 @@ public class GameManager : MonoBehaviour
         if(missionBriefing != null)
         {
             missionBriefing.SetActive(false);
-        }     
+        }
+        completeSound.Play();
         mission[currentMission].missionBrienfing.SetActive(false);
+        
     }
     public void Rute2()
     {
+        click.Play();
         _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
@@ -371,6 +392,7 @@ public class GameManager : MonoBehaviour
         }
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
+        completeSound.Play();
         mission[currentMission].missionBrienfing.SetActive(false);
         var onGoingMission = mission[currentMission];
         currentReward = onGoingMission.reward;
@@ -380,6 +402,7 @@ public class GameManager : MonoBehaviour
     }
     public void Rute3()
     {
+        click.Play();
         _time_ = mission[currentMission].waitTime;
         mission[currentMission].arrivingPoint.SetActive(false);
         ruteSelected = true;
@@ -393,6 +416,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         missionBriefing.SetActive(false);
         mission[currentMission].missionBrienfing.SetActive(false);
+        completeSound.Play();
         var onGoingMission = mission[currentMission];
         currentReward = onGoingMission.reward;
         currentReward *= 3;
@@ -402,7 +426,7 @@ public class GameManager : MonoBehaviour
     }
     public void TimeTrialRute()
     {
-        
+        click.Play();
         startsTrial = true;
         _timeToBeat = mission[currentMission].timeToBeat;
         _time_ = _timeToBeat;
@@ -418,6 +442,7 @@ public class GameManager : MonoBehaviour
         missionBriefing.SetActive(false);
         Time.timeScale = 1;
         mission[currentMission].missionBrienfing.SetActive(false);
+        completeSound.Play();
         var onGoingMission = mission[currentMission];
         currentReward = onGoingMission.reward;
         currentReward *= 10;
@@ -428,42 +453,50 @@ public class GameManager : MonoBehaviour
     #region ButtonsFunctions
     public void CreditsOn()
     {
+        click.Play();
         Menu.SetActive(false);
         Credits.SetActive(true);
     }
     public void OptionsOn()
     {
+        click.Play();
         Menu.SetActive(false);
         Options.SetActive(true);
     }
     public void BackToMenu()
     {
+        click.Play();
         Menu.SetActive(true);
         Options.SetActive(false);
         Credits.SetActive(false);
     }
     public void ExitGame()
-   {
+    {
+        click.Play();
         Application.Quit();
-   }
+    }
     public void LoadGame()
     {
+        click.Play();
         SceneManager.LoadScene("Vertical");
     }
     public void OpenInGameMenu()
     {
+        click.Play();
         menuInGame.SetActive(true);
         menuButtons.SetActive(true);
         Time.timeScale = 0;
     }
     public void OpenOptionsInGame()
     {
+        click.Play();
         menuButtons.SetActive(false);
         optionsInGame.SetActive(true);
         Time.timeScale = 0;
     }
     public void CloseOptionsInGame()
     {
+        click.Play();
         menuButtons.SetActive(true);
         optionsInGame.SetActive(false);
         Time.timeScale = 0;
@@ -477,18 +510,20 @@ public class GameManager : MonoBehaviour
     }
     public void OpenMainMenu()
     {
+        click.Play();
         SceneManager.LoadScene("MenuPrincipal");
         Time.timeScale = 1;
     }
     public void OpenShop()
     {
         isOpen = true;
-        
+        click.Play();
         shopObject.SetActive(true);
         Time.timeScale = 0;
     }
     public void CloseShop()
     {
+        click.Play();
         isOpen = false;
         shopObject.SetActive(false);
         Time.timeScale = 1;
@@ -499,7 +534,7 @@ public class GameManager : MonoBehaviour
 
 
 
-       
+        click.Play();
         if (currentPlayerMoney >= 200 )
         {
             
@@ -527,7 +562,7 @@ public class GameManager : MonoBehaviour
 
 
 
-
+        click.Play();
         if (currentPlayerMoney >= 300)
         {
 
@@ -592,7 +627,11 @@ public class GameManager : MonoBehaviour
             mission[currentMission].arrivingPoint.SetActive(true);*/
             //
             _time_ = 0;
-     
+            if (hasSounded == false)
+            {
+                completeSound.Play();
+                hasSounded = true;
+            }
             mission[currentMission].arrivingPoint.SetActive(true);
             if(_countdown != null)
             {
@@ -615,7 +654,9 @@ public class GameManager : MonoBehaviour
         }
         if (_time_ <= 0)
         {
+           
             _time_ = 0;
+            
         }
         countDown.text = _time_.ToString();
     }
@@ -625,6 +666,7 @@ public class GameManager : MonoBehaviour
         var onGoingMission = mission[currentMission];
         missionCompleted = true;
         onGoingMission.isCompleted = missionCompleted;
+        
         mission[currentMission] = onGoingMission;
         for (int i = 0; i < mission[currentMission].ruteSignsMedium.Length; i++)
         {
@@ -645,10 +687,19 @@ public class GameManager : MonoBehaviour
        
         if (currentPlayerMoney == 0)
         {
+            
+                completeSound.Play();
+
+            hasSounded = false;
+
             currentPlayerMoney = mission[currentMission].reward;
         }
         else
         {
+            hasSounded = false;
+            completeSound.Play();
+                
+            
             currentPlayerMoney += mission[currentMission].reward;
         }
         mission[currentMission].missionBrienfing.SetActive(false);

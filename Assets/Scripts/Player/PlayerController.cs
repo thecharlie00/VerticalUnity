@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour
     public GameObject _light1;
     public GameObject _light2;
     public Text velocityUI;
+    public AudioSource carCrash;
+    public bool hasCrashed;
     #endregion
    /* #region Sound
     public float minSpeed;
@@ -104,14 +106,24 @@ public class PlayerController : MonoBehaviour
         
             maxVelocity = GameManager._GAME_MANAGER.velUpgrade_;
 
-        Debug.Log(maxVelocity);
+        
 
         RaycastHit hit;
         
         if (Physics.Linecast(_light1.transform.position, _light1.transform.position+new Vector3(transform.forward.x, transform.forward.y , transform.forward.z ), out hit)){
            
             Debug.Log("hit");
+            if(hasCrashed == false)
+            {
+                carCrash.Play();
+                hasCrashed = true;
+                
+            }
             carRB.velocity = Vector3.zero;
+        }
+        else
+        {
+            hasCrashed = false;
         }
         Debug.DrawLine(_light1.transform.position, _light1.transform.position + new Vector3(transform.forward.x, transform.forward.y, transform.forward.z), Color.yellow);
 
@@ -200,6 +212,7 @@ public class PlayerController : MonoBehaviour
         if (InputManager._INPUT_MANAGER.isTurbo == 0)
         {
             GameManager._GAME_MANAGER.isActive = false;
+            GameManager._GAME_MANAGER.hasPlayed = false;
             maxAcceleration = iniMaxAcceleration;
             maxVelocity = iniMaxVelocity;
             StartCoroutine(GameManager._GAME_MANAGER.RecoverTurbo());
