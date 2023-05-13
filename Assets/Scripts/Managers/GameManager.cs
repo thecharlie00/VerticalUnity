@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public bool hasPlayed;
     public AudioSource turbo;
     public bool hasSounded;
+    public GameObject particlesTurbo;
     #endregion
     #region Mission
     public int missionIndex = -1;
@@ -104,7 +105,9 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        if(playerController != null)
+        particlesTurbo.SetActive(false);
+       
+        if (playerController != null)
         {
             velUpgrade_ = playerController.maxVelocity;
         }
@@ -320,7 +323,7 @@ public class GameManager : MonoBehaviour
     #region TurboSystem
     public void TurboOn()
     {
-        
+        particlesTurbo.SetActive(true);
         if (hasPlayed == false)
         {
             turbo.Play();
@@ -338,6 +341,7 @@ public class GameManager : MonoBehaviour
         }
         if (!theresTurboRemaining)
         {
+            particlesTurbo.SetActive(false);
             turboPowerReamining = 0;
             hasPlayed = false;
             
@@ -345,7 +349,8 @@ public class GameManager : MonoBehaviour
     }       
     public void TurboOff()
     {
-        if(turboPowerReamining < 100)
+        particlesTurbo.SetActive(false);
+        if (turboPowerReamining < 100)
         {
             turboPowerReamining+=Time.deltaTime;
         }   
