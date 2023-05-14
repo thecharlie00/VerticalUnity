@@ -105,7 +105,11 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        particlesTurbo.SetActive(false);
+        if(particlesTurbo != null)
+        {
+            particlesTurbo.SetActive(false);
+        }
+       
        
         if (playerController != null)
         {
@@ -211,7 +215,7 @@ public class GameManager : MonoBehaviour
         if(sceneName == "SplashScreen")
         {
             
-            if (Input.anyKeyDown)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene("MenuPrincipal");
             }
@@ -267,7 +271,7 @@ public class GameManager : MonoBehaviour
 
             }
         }
-        if(sceneName != "SplashScreen" && sceneName != "MenuPrincipal" && sceneName != "TheEnd")
+        if(sceneName != "SplashScreen" && sceneName != "MenuPrincipal" && sceneName != "TheEnd" && sceneName == "Vertical")
         {
             if (mission[currentMission].isTimeTrial)
             {
